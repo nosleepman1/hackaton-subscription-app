@@ -1,35 +1,31 @@
-import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm';
-import User from '#models/user';
-import Team from '#models/team';
-import { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations';   
-import { DateTime } from 'luxon';
+import { BaseModel, belongsTo, hasMany, hasOne } from '@adonisjs/lucid/orm';
+import { type HasOne, type HasMany, type BelongsTo } from '@adonisjs/lucid/types/relations';
+import User from './user.ts';
+import Team from './team.ts';
+import Theme from './theme.ts'; 
+import Member from './member.ts';
+import Interrested from './interrested.ts'; 
+
 
 
 
 export default class Project extends BaseModel {
 
-    static table = 'projects'
+    @hasOne(() => User)
+    declare user: HasOne<typeof User>
 
-    @column({ isPrimary: true })
-    declare id: string
+    @hasMany(() => Team)
+    declare teams: HasMany<typeof Team>
 
-    @column()
-    declare name: string
+    @belongsTo(() => Theme)
+    declare theme: BelongsTo<typeof Theme>
+    
+    @hasMany(() => Interrested)
+    declare interresteds: HasMany<typeof Interrested>    
 
-    @column()
-    declare description: string
-
-    @column()
-    declare userId: string
-
-    @column()
-    declare teamId: string
-
-    @column.dateTime({columnName: 'created_at', autoCreate: true})
-    declare createdAt: DateTime
-
-    @column.dateTime({columnName: 'updated_at', autoCreate: true, autoUpdate: true})
-    declare updatedAt: DateTime
+    @hasMany(() => Member)
+    declare members: HasMany<typeof Member>    
+    
 
     
 }

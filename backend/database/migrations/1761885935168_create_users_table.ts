@@ -10,8 +10,9 @@ export default class extends BaseSchema {
       table.string('last_name')
       table.string('email', 254).notNullable().unique()
       table.string('password').notNullable()
-      table.enum('role', ['user', 'admin']).defaultTo('user')
-      table.string('matricule').nullable
+      table.uuid('grade_id').references('id').inTable('grades')
+      table.uuid('filere_id').references('id').inTable('fileres') 
+      table.string('matricule').notNullable().unique()  
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
     })
