@@ -23,15 +23,13 @@ router
         router.post('login', [controllers.AccessToken, 'store'])
         router.post('logout', [controllers.AccessToken, 'destroy']).use(middleware.auth())
       })
-      .prefix('auth')
-      .as('auth')
+      .prefix('auth');
 
     router
       .group(() => {
         router.get('/profile', [controllers.Profile, 'show'])
       })
       .prefix('account')
-      .as('profile')
-      .use(middleware.auth())
-  })
-  .prefix('/api/v1')
+      .use(middleware.auth());
+
+  }).prefix('/api/v1')
