@@ -9,6 +9,7 @@ import { controllers } from '#generated/controllers'
 
 router
   .group(() => {
+   
     router
       .group(() => {
         router.post('signup', [controllers.NewAccount, 'store'])
@@ -16,14 +17,12 @@ router
         router.post('logout', [controllers.AccessToken, 'destroy']).use(middleware.auth())
       })
       .prefix('auth')
-      .as('auth')
 
     router
       .group(() => {
         router.get('/profile', [controllers.Profile, 'show'])
       })
       .prefix('account')
-      .as('profile')
       .use(middleware.auth())
   })
   .prefix('/api/v1')
