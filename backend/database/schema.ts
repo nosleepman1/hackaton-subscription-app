@@ -85,7 +85,7 @@ export class ProjectSchema extends BaseModel {
 
 export class MemberSchema extends BaseModel {
 
-  static $columns = ['createdAt', 'id', 'teamId', 'userId', 'updatedAt'] as const
+  static $columns = ['createdAt', 'id', 'teamId', 'teamMateId', 'userId', 'updatedAt'] as const
   
   $columns = MemberSchema.$columns
   
@@ -96,10 +96,13 @@ export class MemberSchema extends BaseModel {
   declare id: string
   
   @column()
-  declare projectId: string
-  
-  @column()
   declare userId: string
+
+  @column()
+  declare teamId: string
+
+  @column()
+  declare teamMateId: string | null
   
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null

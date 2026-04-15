@@ -1,8 +1,10 @@
 import vine from '@vinejs/vine'
 
 
-export const MemberValidator = vine.create({
-    user_id: vine.string().exists({ table: 'users' }),
-    team_id: vine.string().exists({ table: 'teams' }).nullable(),
-    team_mate_id: vine.string().exists({ table: 'team_mates' }).nullable(),    
-})
+export const MemberValidator = vine.compile(
+    vine.object({
+        userId: vine.string(),
+        teamId: vine.string().nullable(),
+        teamMateId: vine.string().nullable(),
+    })
+)

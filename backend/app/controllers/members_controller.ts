@@ -1,4 +1,5 @@
 import Member from '#models/member'
+import { MemberValidator } from '#validators/member'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class MembersController {
@@ -20,11 +21,16 @@ export default class MembersController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request }: HttpContext) {
+  async store({ request, response }: HttpContext) {
 
     const payload = await request.validateUsing(MemberValidator)
 
-    
+    const data = await Member.create(payload)
+
+    return response.json({
+      message: "creation successfully",
+      data
+    })
   }
 
   /**
