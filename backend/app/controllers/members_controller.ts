@@ -36,20 +36,57 @@ export default class MembersController {
   /**
    * Show individual record
    */
-  async show({ params }: HttpContext) {}
+  async show({ params, response  }: HttpContext) {
 
-  /**
-   * Edit individual record
-   */
-  async edit({ params }: HttpContext) {}
+    const data = await Member.findOrFail(params.id)
 
-  /**
-   * Handle form submission for the edit action
-   */
-  async update({ params, request }: HttpContext) {}
+    return response.json({
+        message: "member found",
+        data
+    })
+  }
+
+
+  async update({ params, request, response  }: HttpContext) {
+
+    const data = await Member.findOrFail(params.id)
+
+    if(data) {
+      const payload = await request.validateUsing(MemberValidator)
+
+      data.merge(payload)
+
+      await data.save()
+
+      return response.json({
+          message: "updated successfully",
+          data
+      })
+    }
+    
+    return response.json({
+        message: "member not found"
+    })  
+  }
 
   /**
    * Delete record
    */
-  async destroy({ params }: HttpContext) {}
+  async destroy({ params, response   }: HttpContext) {
+
+    const data = await Member.findOrFail(params.id)
+
+    if(data) {
+      await data.delete()
+
+      return response.json({
+          message: "deleted successfully",
+          data
+      })
+    }
+    
+    return response.json({
+        message: "member not found"
+    })  
+    }
 }
