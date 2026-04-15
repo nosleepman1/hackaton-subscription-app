@@ -1,8 +1,9 @@
-import { BaseModel, hasMany } from '@adonisjs/lucid/orm';
+import { hasMany } from '@adonisjs/lucid/orm';
 import Project from './project.ts';
 import { type HasMany } from '@adonisjs/lucid/types/relations';
+import { ThemeSchema } from '#database/schema';
 
-export default class Theme extends BaseModel {
+export default class Theme extends ThemeSchema {
 
 
     @hasMany(() => Project)
