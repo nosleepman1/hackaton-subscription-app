@@ -1,7 +1,10 @@
 import Interrested from '#models/interrested'
+import { InterrestedValidator } from '#validators/interrested'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class InterrestedsController {
+  
+  
     async index({ response }: HttpContext) {
         return response.json({
             message: "interresteds list",
@@ -11,7 +14,10 @@ export default class InterrestedsController {
         })
     }
 
+
+
     async store({ request, response }: HttpContext) {
+        
         const payload = await request.validateUsing(InterrestedValidator)
 
         const data = await Interrested.create(payload)
@@ -22,6 +28,8 @@ export default class InterrestedsController {
         })
     }
 
+
+
     async show({ params, response }: HttpContext) {
         const data = await Interrested.findOrFail(params.id)
 
@@ -30,6 +38,9 @@ export default class InterrestedsController {
             data
         })
     }
+
+
+
 
     async update({ params, request, response }: HttpContext) {
         const data = await Interrested.findOrFail(params.id)
@@ -51,6 +62,8 @@ export default class InterrestedsController {
             message: "interrested not found"
         })
     }
+
+    
 
     async destroy({ params, response }: HttpContext) {
         const data = await Interrested.findOrFail(params.id)
