@@ -1,22 +1,15 @@
-/*
-|--------------------------------------------------------------------------
-| Routes file
-|--------------------------------------------------------------------------
-|
-| The routes file is used for defining the HTTP routes.
-|
-*/
-
+import AutoSwagger from 'adonis-autoswagger';
+import swagger from '#config/swagger';
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 import { controllers } from '#generated/controllers'
 
-router.get('/', () => {
-  return { hello: 'world' }
-})
+
+
 
 router
   .group(() => {
+   
     router
       .group(() => {
         router.post('signup', [controllers.NewAccount, 'store'])
@@ -24,14 +17,34 @@ router
         router.post('logout', [controllers.AccessToken, 'destroy']).use(middleware.auth())
       })
       .prefix('auth')
-      .as('auth')
 
     router
       .group(() => {
         router.get('/profile', [controllers.Profile, 'show'])
       })
       .prefix('account')
-      .as('profile')
       .use(middleware.auth())
   })
   .prefix('/api/v1')
+
+
+
+
+
+
+
+
+
+
+
+
+router.get("/swagger", async () => {
+  return AutoSwagger.default.docs(router.toJSON(), swagger);
+});
+
+// Renders Swagger-UI and passes YAML-output of /swagger
+router.get("/docs", async () => {
+  return AutoSwagger.default.ui("/swagger", swagger);
+  // return AutoSwagger.default.scalar("/swagger"); to use Scalar instead. If you want, you can pass proxy url as second argument here.
+  // return AutoSwagger.default.rapidoc("/swagger", "view"); to use RapiDoc instead (pass "view" default, or "read" to change the render-style)
+});

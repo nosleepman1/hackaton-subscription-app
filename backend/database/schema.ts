@@ -33,18 +33,136 @@ export class AuthAccessTokenSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
+  static $columns = ['createdAt', 'email', 'firstName', 'lastName ', 'id', 'password', 'updatedAt'] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()
   declare email: string
   @column()
-  declare fullName: string | null
+  declare firstName: string 
+  @column()
+  declare lastName: string 
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
   @column({ serializeAs: null })
   declare password: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
+
+export class ThemeSchema extends BaseModel {
+  static $columns = ['createdAt', 'description', 'id', 'name', 'updatedAt'] as const
+  $columns = ThemeSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string
+  @column({ isPrimary: true })
+  declare id: string  
+  @column()
+  declare name: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class ProjectSchema extends BaseModel {
+  static $columns = ['createdAt', 'description', 'id', 'name', 'themeId', 'updatedAt'] as const
+  $columns = ProjectSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare name: string
+  @column()
+  declare themeId: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+} 
+
+export class ProjectMemberSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'projectId', 'userId', 'updatedAt'] as const
+  $columns = ProjectMemberSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare projectId: string
+  @column()
+  declare userId: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+
+export class FiliereSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'name', 'updatedAt'] as const
+
+  $columns = FiliereSchema.$columns
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+
+  @column({ isPrimary: true })
+  declare id: string
+
+  @column()
+  declare name: string
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+
+
+export class GradeSchema extends BaseModel {
+
+  static $columns = ['createdAt', 'id', 'name', 'updatedAt'] as const
+
+  $columns = GradeSchema.$columns
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+  @column({ isPrimary: true })
+  declare id: string
+
+  @column()
+  declare name: string
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+
+}
+
+
+export class InterestedSchema extends BaseModel {
+
+  static $columns = ['id', 'userId', 'projectId','createdAt', 'updatedAt'] as const
+
+  $columns = InterestedSchema.$columns
+
+  @column({ isPrimary: true })
+  declare id: string
+
+  @column()
+  declare userId: string
+
+  @column()
+  declare projectId: string
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null  
+
+}
+
+  
+  
