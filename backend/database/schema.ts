@@ -83,17 +83,27 @@ export class ProjectSchema extends BaseModel {
   declare updatedAt: DateTime | null
 } 
 
-export class ProjectMemberSchema extends BaseModel {
-  static $columns = ['createdAt', 'id', 'projectId', 'userId', 'updatedAt'] as const
-  $columns = ProjectMemberSchema.$columns
+export class MemberSchema extends BaseModel {
+
+  static $columns = ['createdAt', 'id', 'teamId', 'teamMateId', 'userId', 'updatedAt'] as const
+  
+  $columns = MemberSchema.$columns
+  
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
+  
   @column({ isPrimary: true })
   declare id: string
-  @column()
-  declare projectId: string
+  
   @column()
   declare userId: string
+
+  @column()
+  declare teamId: string
+
+  @column()
+  declare teamMateId: string | null
+  
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
@@ -163,6 +173,35 @@ export class InterestedSchema extends BaseModel {
   declare updatedAt: DateTime | null  
 
 }
+
+
+export class TeamSchema extends BaseModel {
+
+  static $columns = ['createdAt', 'id', 'name', 'projectId', 'userId', 'updatedAt'] as const
+
+  $columns = TeamSchema.$columns
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+  @column({ isPrimary: true })
+  declare id: string
+
+  @column()
+  declare name: string
+
+  @column()
+  declare projectId: string
+
+  @column()
+  declare userId: string
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+
+}
+
+  
 
   
   

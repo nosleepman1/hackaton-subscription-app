@@ -7,9 +7,12 @@ import { controllers } from '#generated/controllers'
 
 
 
+
 router
   .group(() => {
    
+
+
     router
       .group(() => {
         router.post('signup', [controllers.NewAccount, 'store'])
@@ -18,12 +21,34 @@ router
       })
       .prefix('auth')
 
+
+
     router
       .group(() => {
         router.get('/profile', [controllers.Profile, 'show'])
       })
       .prefix('account')
       .use(middleware.auth())
+
+
+
+
+    const InterrestedsController = () => import('#controllers/interresteds_controller')
+    const MembersController = () => import('#controllers/members_controller')
+    const ProjectsController = () => import('#controllers/projects_controller') 
+    const TeamsController = () => import('#controllers/teams_controller') 
+    
+    router
+      .resource('interrested', InterrestedsController)
+
+    router
+      .resource('member', MembersController)
+
+    router
+      .resource('project', ProjectsController)
+
+    router
+      .resource('team', TeamsController)  
   })
   .prefix('/api/v1')
 

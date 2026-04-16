@@ -1,11 +1,12 @@
-import { BaseModel, belongsTo, hasMany, hasOne } from '@adonisjs/lucid/orm';
+import { belongsTo, hasMany, hasOne } from '@adonisjs/lucid/orm';
 import User from './user.ts';
 import { type HasOne, type HasMany, type BelongsTo } from '@adonisjs/lucid/types/relations';  
 import Member from './member.ts';
 import Project from './project.ts'; 
+import { TeamSchema } from '#database/schema';
 
 
-export default class Team extends BaseModel {
+export default class Team extends TeamSchema {  
 
     
     @belongsTo(() => User)
