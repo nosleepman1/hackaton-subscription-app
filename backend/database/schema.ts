@@ -201,6 +201,37 @@ export class TeamSchema extends BaseModel {
 
 }
 
+export class TeamMateSchema extends BaseModel {
+
+  static $columns = ['createdAt', 'id', 'firstName', 'lastName', 'gradeId', 'filereId', 'matricule', 'updatedAt'] as const
+
+  $columns = TeamMateSchema.$columns
+
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+
+  @column({ isPrimary: true })
+  declare id: string
+
+  @column()
+  declare firstName: string
+
+  @column()
+  declare lastName: string
+
+  @column()
+  declare gradeId: string
+
+  @column()
+  declare filereId: string
+
+  @column()
+  declare matricule: string
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+} 
+
   
 
   
