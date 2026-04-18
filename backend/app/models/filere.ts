@@ -9,4 +9,5 @@ export default class Filere extends FiliereSchema {
 
     @hasMany(() => User)
     declare users: HasMany<typeof User>
+    
 }   
