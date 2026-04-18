@@ -9,6 +9,7 @@ import Team from '#models/team'
 import Grade from '#models/grade'
 import Filere from '#models/filere'
 import { type BelongsTo, type HasOne } from '@adonisjs/lucid/types/relations'
+import Member from './member.ts'
 
 
 export default class User extends compose(UserSchema, withAuthFinder(hash)) {
@@ -27,13 +28,21 @@ export default class User extends compose(UserSchema, withAuthFinder(hash)) {
     
     return `${first.slice(0, 2)}`.toUpperCase()
   }
+  
 
   @hasOne(() => Interrested)
   declare interrested: HasOne<typeof Interrested>
 
+
+
   @hasOne(() => Team)
   declare team: HasOne<typeof Team>
+
+  @hasOne(() => Member)
+  declare member: HasOne<typeof Member>
   
+
+
   @belongsTo(() => Grade)
   declare grade: BelongsTo<typeof Grade>
 

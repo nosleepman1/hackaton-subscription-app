@@ -5,10 +5,13 @@
 
 export const controllers = {
   AccessToken: () => import('#controllers/access_token_controller'),
+  Filieres: () => import('#controllers/filieres_controller'),
+  Grades: () => import('#controllers/grades_controller'),
   Interresteds: () => import('#controllers/interresteds_controller'),
   Members: () => import('#controllers/members_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   Profile: () => import('#controllers/profile_controller'),
   Projects: () => import('#controllers/projects_controller'),
+  TeamMates: () => import('#controllers/team_mates_controller'),
   Teams: () => import('#controllers/teams_controller'),
 }

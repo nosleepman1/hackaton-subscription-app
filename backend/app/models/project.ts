@@ -12,18 +12,15 @@ import { ProjectSchema } from '#database/schema';
 export default class Project extends ProjectSchema {
 
 
-    @hasMany(() => Team)
-    declare teams: HasMany<typeof Team>
+    @belongsTo(() => Team)
+    declare team: BelongsTo<typeof Team>
 
     @belongsTo(() => Theme)
     declare theme: BelongsTo<typeof Theme>
     
-    @hasMany(() => Interrested)
-    declare interresteds: HasMany<typeof Interrested>    
+    @belongsTo(() => Interrested)
+    declare interresteds: BelongsTo<typeof Interrested>    
 
-    @hasMany(() => Member)
-    declare members: HasMany<typeof Member>    
-    
-
-    
+    @belongsTo(() => Member)
+    declare members: BelongsTo<typeof Member>    
 }
