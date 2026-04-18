@@ -1,8 +1,9 @@
 import { TeamMateSchema } from '#database/schema'
-import {  belongsTo } from '@adonisjs/lucid/orm'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations' 
+import {  belongsTo, hasMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations' 
 import Grade from '#models/grade'
 import Filiere from '#models/filere'
+import Member from './member.ts'
 
 export default class TeamMate extends TeamMateSchema {
 
@@ -10,5 +11,8 @@ export default class TeamMate extends TeamMateSchema {
     declare grade: BelongsTo<typeof Grade>
 
     @belongsTo(() => Filiere)
-    declare filere: BelongsTo<typeof Filiere>   
+    declare filere: BelongsTo<typeof Filiere>  
+    
+    @hasMany(() => Member)
+    declare members: HasMany<typeof Member> 
 }
