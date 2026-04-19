@@ -1,6 +1,6 @@
-import { hasMany } from '@adonisjs/lucid/orm';
+import { belongsTo } from '@adonisjs/lucid/orm';
 import User from './user.ts';
-import { type HasMany } from '@adonisjs/lucid/types/relations'; 
+import { type BelongsTo } from '@adonisjs/lucid/types/relations'; 
 import Project from './project.ts';
 import { InterestedSchema } from '#database/schema';
 
@@ -8,9 +8,9 @@ import { InterestedSchema } from '#database/schema';
 export default class Interrested extends InterestedSchema {
 
 
-    @hasMany(() => User)
-    declare users: HasMany<typeof User>
+    @belongsTo(() => User)
+    declare user: BelongsTo<typeof User>
 
-    @hasMany(() => Project)
-    declare projects: HasMany<typeof Project> 
+    @belongsTo(() => Project)
+    declare project: BelongsTo<typeof Project> 
 }   

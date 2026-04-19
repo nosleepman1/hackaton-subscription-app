@@ -3,12 +3,12 @@ import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { type AccessToken, DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
-import { belongsTo, hasOne } from '@adonisjs/lucid/orm'
 import Interrested from '#models/interrested'
 import Team from '#models/team' 
 import Grade from '#models/grade'
 import Filere from '#models/filere'
-import { type BelongsTo, type HasOne } from '@adonisjs/lucid/types/relations'
+import { belongsTo, hasOne, hasMany } from '@adonisjs/lucid/orm'
+import { type BelongsTo, type HasOne, type HasMany } from '@adonisjs/lucid/types/relations'
 import Member from './member.ts'
 
 
@@ -28,10 +28,10 @@ export default class User extends compose(UserSchema, withAuthFinder(hash)) {
     
     return `${first.slice(0, 2)}`.toUpperCase()
   }
-  
 
-  @hasOne(() => Interrested)
-  declare interrested: HasOne<typeof Interrested>
+
+  @hasMany(() => Interrested)
+  declare interrested: HasMany<typeof Interrested>
 
 
 
