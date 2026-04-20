@@ -4,7 +4,6 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ProjectsController {
 
-
     async index({response}: HttpContext) {
 
         return response.json({
@@ -20,7 +19,6 @@ export default class ProjectsController {
     async store({request, response}: HttpContext) {
 
         const payload = await request.validateUsing(ProjectValidator)
-
         const project = await Project.create(payload)
 
         return response.json({
