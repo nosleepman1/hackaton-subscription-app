@@ -9,7 +9,7 @@ export default class FilieresController {
 
         return response.status(200).json({
             message: "Liste des filieres",
-            data: Filere.all()
+            data: await Filere.all()
         })
     }
 
@@ -26,16 +26,41 @@ export default class FilieresController {
 
     async store({request, response}: HttpContext) {
 
-        const payload = request.validateUsing(FilereValidator)
+        const payload = await request.validateUsing(FilereValidator)
 
-        if(payload) {
-            await Filere.create(payload)
+        const filiere = await Filere.create(payload)
 
-            return response.status(201).json({
-                message: "Filiere created successfully",
-                data: payload
-            })  
-        }
+        return response.status(201).json({
+            message: "Filiere created successfully",
+            data: filiere
+        })
     }
+
+
+    async update({params, request, response}: HttpContext) {
+
+        const filere = await Filere.findOrFail(params.id)
+
+        const newData = await request.validateUsing(FilereValidator)
+
+        const data = filere.merge(newData)
+
+        return response.status(201).json({
+            message: "update successful",
+            data
+        })
+    }
+
+
+    async destroy({params, response}: HttpContext) {
+
+        const filiere = await Filere.findOrFail(params.id)
+
+        await filiere.delete()
+
+        return response.status(200).json({
+            message: "delete successful"     
+        })
+    }   
 
 }
