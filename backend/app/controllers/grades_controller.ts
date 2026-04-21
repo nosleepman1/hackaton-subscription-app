@@ -1,7 +1,6 @@
 import Grade from '#models/grade'
 import { GradeValidator } from '#validators/grade'
 import type { HttpContext } from '@adonisjs/core/http'
-import { messages } from '@vinejs/vine/defaults'
 
 export default class GradesController {
 
