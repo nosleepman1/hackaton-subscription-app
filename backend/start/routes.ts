@@ -37,7 +37,7 @@ router
     const MembersController = () => import('#controllers/members_controller')
     const ProjectsController = () => import('#controllers/projects_controller') 
     const TeamsController = () => import('#controllers/teams_controller') 
-    
+    const ThemesController = () => import('#controllers/themes_controller')
     router
       .resource('interrested', InterrestedsController)
 
@@ -48,7 +48,11 @@ router
       .resource('project', ProjectsController)
 
     router
-      .resource('team', TeamsController)  
+      .resource('team', TeamsController) 
+      
+    router
+      .resource('theme', )
+  
   })
   .prefix('/api/v1')
 

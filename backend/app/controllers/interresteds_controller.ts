@@ -10,6 +10,8 @@ export default class InterrestedsController {
             message: "interresteds list",
             data: Interrested   
                     .query()
+                    .preload('user')
+                    .preload('project')
                     .orderBy('created_at', 'desc')
         })
     }

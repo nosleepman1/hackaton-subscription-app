@@ -9,9 +9,6 @@ export default class TeamsController {
  
  
  
-  /**
-   * Display a list of resource
-   */
   async index({response}: HttpContext) {
 
 
