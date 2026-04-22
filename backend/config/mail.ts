@@ -2,12 +2,14 @@ import env from '#start/env'
 import { defineConfig, transports } from '@adonisjs/mail'
 
 const mailConfig = defineConfig({
+  
+  
   default: env.get('MAIL_MAILER'),
 
   /**
    * The mailers object can be used to configure multiple mailers
    * each using a different transport or same transport with different
-   * options.
+   * options.0
    */
   from: {
     address: env.get('MAIL_FROM_ADDRESS'),
