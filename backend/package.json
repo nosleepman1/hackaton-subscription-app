@@ -60,6 +60,7 @@
     "@adonisjs/core": "^7.3.0",
     "@adonisjs/cors": "^3.0.0",
     "@adonisjs/lucid": "^22.4.0",
+    "@adonisjs/mail": "^10.2.0",
     "@adonisjs/session": "^8.0.0",
     "@adonisjs/shield": "^9.0.0",
     "@japa/api-client": "^3.2.1",
@@ -76,5 +77,5 @@
       "./app/middleware/*.ts"
     ]
   },
- "prettier": "@adonisjs/prettier-config"
+  "prettier": "@adonisjs/prettier-config"
 }
