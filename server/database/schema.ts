@@ -5,7 +5,7 @@
  */
 
 import { BaseModel, column } from '@adonisjs/lucid/orm'
-import { DateTime } from 'luxon'
+import { DateTime } from '../node_modules/@types/luxon/index.js'
 
 export class AuthAccessTokenSchema extends BaseModel {
   static $columns = ['abilities', 'createdAt', 'expiresAt', 'hash', 'id', 'lastUsedAt', 'name', 'tokenableId', 'type', 'updatedAt'] as const
@@ -33,29 +33,29 @@ export class AuthAccessTokenSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  
+
   static $columns = ['createdAt', 'email', 'firstName', 'lastName ', 'id', 'password', 'updatedAt'] as const
-  
+
   $columns = UserSchema.$columns
-  
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
-  
+
   @column()
   declare email: string
-  
+
   @column()
-  declare firstName: string 
-  
+  declare firstName: string
+
   @column()
-  declare lastName: string 
-  
+  declare lastName: string
+
   @column({ isPrimary: true })
   declare id: string
-  
+
   @column({ serializeAs: null })
   declare password: string
-  
+
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
@@ -68,7 +68,7 @@ export class ThemeSchema extends BaseModel {
   @column()
   declare description: string
   @column({ isPrimary: true })
-  declare id: string  
+  declare id: string
   @column()
   declare name: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
@@ -90,20 +90,20 @@ export class ProjectSchema extends BaseModel {
   declare themeId: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
-} 
+}
 
 export class MemberSchema extends BaseModel {
 
   static $columns = ['createdAt', 'id', 'teamId', 'teamMateId', 'userId', 'updatedAt'] as const
-  
+
   $columns = MemberSchema.$columns
-  
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
-  
+
   @column({ isPrimary: true })
   declare id: string
-  
+
   @column()
   declare userId: string
 
@@ -112,7 +112,7 @@ export class MemberSchema extends BaseModel {
 
   @column()
   declare teamMateId: string | null
-  
+
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }
@@ -162,7 +162,7 @@ export class GradeSchema extends BaseModel {
 
 export class InterestedSchema extends BaseModel {
 
-  static $columns = ['id', 'userId', 'projectId','createdAt', 'updatedAt'] as const
+  static $columns = ['id', 'userId', 'projectId', 'createdAt', 'updatedAt'] as const
 
   $columns = InterestedSchema.$columns
 
@@ -179,7 +179,7 @@ export class InterestedSchema extends BaseModel {
   declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime | null  
+  declare updatedAt: DateTime | null
 
 }
 
@@ -239,9 +239,9 @@ export class TeamMateSchema extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
-} 
+}
 
-  
 
-  
-  
+
+
+
