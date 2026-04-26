@@ -62,16 +62,14 @@ class AuthService
         }
 
         if (!hash_equals((string) $user->id, (string) $id) ||
-            !hash_equals($user->email_verification_hash, $token)) {
+            !hash_equals(sha1($user->getEmailForVerification()), (string) $token)) {
             return [
                 'success' => false,
                 'message' => 'Lien de vérification invalide.'
             ];
         }
 
-        $user->email_verified_at = now();
-        $user->email_verification_hash = null;
-        $user->save();
+        $user->markEmailAsVerified();
 
         return [
             'success' => true,
