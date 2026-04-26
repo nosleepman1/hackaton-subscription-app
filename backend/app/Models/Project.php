@@ -24,5 +24,15 @@ class Project extends Model
         return $this->belongsTo(Theme::class);
     }
 
-    
+
+
+    public function teams()
+    {
+        return $this->hasMany(Team::class);
+    }
+
+    public function interesteds()
+    {
+        return $this->hasMany(Interested::class);
+    }
 }

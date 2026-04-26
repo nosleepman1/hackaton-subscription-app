@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\ThemeController;
 use App\Http\Controllers\Api\V1\ProjectController;
+use App\Http\Controllers\Api\V1\TeamController;
+use App\Http\Controllers\Api\V1\InterestedController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -23,8 +25,10 @@ Route::prefix("v1")->group(function () {
     });
 
 
-    Route::resource('themes', ThemeController::class)->middleware('auth:sanctum');
-    Route::resource('projects', ProjectController::class)->middleware('auth:sanctum');
+    Route::apiResource('themes', ThemeController::class)->middleware('auth:sanctum');
+    Route::apiResource('projects', ProjectController::class)->middleware('auth:sanctum');
+    Route::apiResource('teams', TeamController::class)->middleware('auth:sanctum');
+    Route::apiResource('interesteds', InterestedController::class)->middleware('auth:sanctum');
     
 
 });
