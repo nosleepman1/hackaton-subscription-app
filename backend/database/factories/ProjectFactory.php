@@ -18,7 +18,9 @@ class ProjectFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->name(),
+            'description' => $this->faker->text(),
+            'theme_id' => $this->faker->numberBetween(1, 10),
         ];
     }
 }

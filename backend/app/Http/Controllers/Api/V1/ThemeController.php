@@ -14,7 +14,10 @@ class ThemeController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'message' => 'Thèmes récupérés avec succès',
+            'themes' => Theme::where('deleted_at', null)->orderBy('name', 'asc')->get(),
+        ]);
     }
 
     /**
@@ -22,7 +25,12 @@ class ThemeController extends Controller
      */
     public function store(StoreThemeRequest $request)
     {
-        //
+        $data = $request->validated();
+        $theme = Theme::create($data);
+        return response()->json([
+            'message' => 'Thème créé avec succès',
+            'theme' => $theme,
+        ]);
     }
 
     /**
@@ -30,7 +38,10 @@ class ThemeController extends Controller
      */
     public function show(Theme $theme)
     {
-        //
+        return response()->json([
+            'message' => 'Thème récupéré avec succès',
+            'theme' => $theme,
+        ]);
     }
 
     /**
@@ -38,7 +49,12 @@ class ThemeController extends Controller
      */
     public function update(UpdateThemeRequest $request, Theme $theme)
     {
-        //
+        $data = $request->validated();
+        $theme->update($data);
+        return response()->json([
+            'message' => 'Thème modifié avec succès',
+            'theme' => $theme,
+        ]);
     }
 
     /**
@@ -46,6 +62,10 @@ class ThemeController extends Controller
      */
     public function destroy(Theme $theme)
     {
-        //
+        //soft delete
+        $theme->delete();   
+        return response()->json([
+            'message' => 'Thème supprimé avec succès',
+        ]);
     }
 }
