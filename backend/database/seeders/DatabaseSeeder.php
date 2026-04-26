@@ -16,6 +16,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {  
-        
+        $this->call([
+            ThemeSeeder::class,
+            ProjectSeeder::class,
+            UserSeeder::class
+        ]);
     }
 }

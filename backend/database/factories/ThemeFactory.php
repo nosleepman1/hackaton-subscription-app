@@ -17,8 +17,21 @@ class ThemeFactory extends Factory
      */
     public function definition(): array
     {
+        $themes = [
+            'Intelligence artificielle',
+            'Internet des objets',
+            'Blockchain',
+            'Cybersecurité',
+            'Cloud computing',
+            'Big data',
+            'Réalité virtuelle',
+            'Réalité augmentée',
+            'Machine learning',
+            'Deep learning',
+        ];
+        $theme = $this->faker->randomElement($themes);
         return [
-            'name' => $this->faker->name(),
+            'name' => $theme,
             'description' => $this->faker->text(),  
         ];
     }
