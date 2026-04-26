@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\Filiere;
+use App\Enums\Grade;
 use App\Events\UserRegistered;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -52,34 +54,70 @@ class AuthService
         
         $user = User::findOrFail($id);
 
-        if($user->hasVerifiedEmail()) {
-            return "email deja verifé";
-        }
-
-        $user->markEmailVerified();
-
-        return "Verification reussie";
-    }
-
-    public function logout() {
-        /** @var \App\Models\User|null $user */
-        $user = Auth::user();
-
-        if(!$user) {
+        if ($user->hasVerifiedEmail()) {
             return [
-                "success" => false, 
-                "message" => "utilisateur non connecté"
+                'success' => false,
+                'message' => 'Cet email a déjà été vérifié.'
             ];
         }
 
-        /** @var \Laravel\Sanctum\PersonalAccessToken $token */
+        if (!hash_equals((string) $user->id, (string) $id) ||
+            !hash_equals($user->email_verification_hash, $token)) {
+            return [
+                'success' => false,
+                'message' => 'Lien de vérification invalide.'
+            ];
+        }
 
+        $user->email_verified_at = now();
+        $user->email_verification_hash = null;
+        $user->save();
+
+        return [
+            'success' => true,
+            'message' => 'Adresse email vérifiée avec succès.',
+        ]; 
+    }
+
+    public function logout() {
+        /**
+         * @var \App\Models\User|null $user
+         */
+        $user = Auth::user();
+
+        if (!$user) {
+            return [
+                "success" => false,
+                "message" => "Utilisateur non connecté"
+            ];
+        }
+
+        /** @var \Laravel\Sanctum\PersonalAccessToken|null $token */
         $token = $user->currentAccessToken();
-        $token->delete();
+
+        // Protection : si jamais currentAccessToken() retourne null
+        if ($token) {
+            $token->delete();
+        }
 
         return [
             "success" => true,
-            "message" => "Deconnexion reussie"
-        ];
+            "message" => "Déconnexion réussie"
+        ];  
+    }
+
+
+    public function grades() {
+        return collect(Grade::cases())->map(fn ($case) => [
+            "value" => $case->value,
+            "label" => $case->label(),
+        ]);
+    }
+
+    public function filieres() {
+        return collect(Filiere::cases())->map(fn ($case) => [
+            "value" => $case->value,
+            "label" => $case->label(),
+        ]);
     }
 }
