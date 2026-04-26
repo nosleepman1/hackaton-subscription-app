@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Project;
+namespace App\Http\Requests\Interested;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreProjectRequest extends FormRequest
+class StoreInterestedRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,18 +23,15 @@ class StoreProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'description' => 'required',
-            'theme_id' => 'required ',
+            'project_id' => 'required|exists:projects,id',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom est requis',
-            'description.required' => 'La description est requise',
-            'theme_id.required' => 'Le thème est requis',
+            'project_id.required' => 'Le projet est requis.',
+            'project_id.exists' => 'Le projet n\'existe pas.',
         ];
-    }       
+    }
 }

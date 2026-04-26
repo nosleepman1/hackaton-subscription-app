@@ -49,12 +49,19 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        $data = $request->validated();
-        $project->update($data);
-        return response()->json([
-            'message' => 'Projet modifié avec succès',
-            'project' => $project, 
-        ]);             
+        try {
+            $data = $request->validated();
+            $project->update($data);
+            return response()->json([
+                'message' => 'Projet modifié avec succès',
+                'project' => $project, 
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Erreur lors de la modification du projet',
+                'error' => $e->getMessage(),
+            ], 500);
+        }   
     }
 
     /**

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Project;
+namespace App\Http\Requests\Team;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreProjectRequest extends FormRequest
+class UpdateTeamRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,18 +23,17 @@ class StoreProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'description' => 'required',
-            'theme_id' => 'required ',
+            'name'  => 'required|string|max:255',
+            'project_id' => 'required|exists:projects,id',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'Le nom est requis',
-            'description.required' => 'La description est requise',
-            'theme_id.required' => 'Le thème est requis',
+            'name.required' => 'Le nom de l\'equipe est requis.',
+            'project_id.required' => 'Le projet est requis.',
+            'project_id.exists' => 'Le projet n\'existe pas.',
         ];
-    }       
+    }   
 }
