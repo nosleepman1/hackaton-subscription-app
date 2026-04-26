@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->foreignId('team_mate_id')->nullable()->constrained('team_mates')->cascadeOnDelete();
-            $table->foreignId('team_id')->constrained('teams')->cascadeOnDelete();
+            $table->foreignId('team_id')->nullable()->constrained('teams')->cascadeOnDelete();
             $table->softDeletes();  
             $table->timestamps();
         });
