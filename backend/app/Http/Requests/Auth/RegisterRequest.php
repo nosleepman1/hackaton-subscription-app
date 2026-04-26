@@ -2,8 +2,11 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Enums\Filiere;
+use App\Enums\Grade;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class RegisterRequest extends FormRequest
 {
@@ -27,8 +30,8 @@ class RegisterRequest extends FormRequest
             'lastname' => 'string|min:3',
             'email' => 'string|unique:users,email',
             'password' => 'string|min:8',
-            'grade_id' => 'integer|exists:grades,id',
-            'filiere_id' => 'integer|exists:filieres,id',
+            'grade' => ['required', new Enum(Grade::class)],
+            'filiere' => ['required', new Enum(Filiere::class)],
             'matricule' => 'string|unique:users,matricule',
         ];
     }
@@ -40,16 +43,14 @@ class RegisterRequest extends FormRequest
             'lastname.required' => 'Le nom est requis',
             'email.required' => 'L\'email est requis',
             'password.required' => 'Le mot de passe est requis',
-            'grade_id.required' => 'La filiere est requise',
-            'filiere_id.required' => 'La filiere est requise',
+            'grade.required' => 'La filiere est requise',
+            'filiere.required' => 'La filiere est requise',
             'matricule.required' => 'La filiere est requise',
             'matricule.unique' => 'Le matricule existe deja',
             'email.unique' => 'L\'email existe deja',
             'password.min' => 'Le mot de passe doit contenir au moins 8 caracteres',
             'firstname.min' => 'Le prénom doit contenir au moins 3 caracteres',
-            'lastname.min' => 'Le nom doit contenir au moins 3 caracteres',
-            'grade_id.exists' => 'La filiere est invalide',
-            'filiere_id.exists' => 'La filiere est invalide',
+            'lastname.min' => 'Le nom doit contenir au moins 3 caracteres',       
         ];
     }
 }

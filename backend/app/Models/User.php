@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Filiere;
+use App\Enums\Grade;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -11,7 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['firstname', 'lastname', 'phone', 'email', 'password'])]
+#[Fillable(['firstname', 'lastname', 'matricule','phone', 'email', 'password', 'filiere', 'grade'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -28,6 +30,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'filiere' => Filiere::class,
+            'grade' => Grade::class,
         ];
     }
 }

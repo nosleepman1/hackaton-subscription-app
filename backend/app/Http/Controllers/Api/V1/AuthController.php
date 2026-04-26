@@ -30,8 +30,18 @@ class AuthController extends Controller
         return response()->json($response);
     }
 
-    public function logout(Request $request) {
-        $response = $this->authService->logout($request);
+    public function logout() {
+        $response = $this->authService->logout();
         return response()->json($response);
-    }   
+    } 
+
+    public function grades() {
+        $response = $this->authService->grades();
+        return response()->json($response);
+    }
+
+    public function filieres() {
+        $response = $this->authService->filieres();
+        return response()->json($response);
+    }
 }
