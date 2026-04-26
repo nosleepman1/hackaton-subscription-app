@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\ThemeController;
+use App\Http\Controllers\Api\V1\ProjectController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -21,9 +23,8 @@ Route::prefix("v1")->group(function () {
     });
 
 
-    Route::prefix('team')->group(function () {
-
-        
-    });
+    Route::resource('themes', ThemeController::class)->middleware('auth:sanctum');
+    Route::resource('projects', ProjectController::class)->middleware('auth:sanctum');
+    
 
 });

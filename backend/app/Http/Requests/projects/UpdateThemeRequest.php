@@ -12,7 +12,7 @@ class UpdateThemeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,16 @@ class UpdateThemeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required',
+            'description' => 'required',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Le nom est requis',
+            'description.required' => 'La description est requise',
+        ];
+    }       
 }

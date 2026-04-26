@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\projects;
+namespace App\Http\Requests\Project;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -12,7 +12,7 @@ class UpdateProjectRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,18 @@ class UpdateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required',
+            'description' => 'required',
+            'theme_id' => 'required',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Le nom est requis',
+            'description.required' => 'La description est requise',
+            'theme_id.required' => 'Le thème est requis',
+        ];
+    }       
 }
