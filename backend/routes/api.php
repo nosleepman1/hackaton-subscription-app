@@ -15,7 +15,7 @@ Route::prefix("v1")->group(function () {
         Route::post("register", [AuthController::class, "register"]);
         Route::post("login", [AuthController::class, "login"]);
         Route::post("logout", [AuthController::class, "logout"])->middleware('auth:sanctum');
-        Route::get("verify/{id}/{token}", [AuthController::class, "verify"])->name("verification.verify");
+        Route::get("verify/{id}/{hash}", [AuthController::class, "verify"])->name("verification.verify");
         Route::get("grades", [AuthController::class, "grades"]);
         Route::get("filieres", [AuthController::class, "filieres"]);
     });

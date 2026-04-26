@@ -30,6 +30,7 @@ class RegisterRequest extends FormRequest
             'lastname' => 'string|min:3',
             'email' => 'string|unique:users,email',
             'password' => 'string|min:8',
+            'phone' => 'string|min:8|unique:users,phone',   
             'grade' => ['required', new Enum(Grade::class)],
             'filiere' => ['required', new Enum(Filiere::class)],
             'matricule' => 'string|unique:users,matricule',
@@ -50,7 +51,9 @@ class RegisterRequest extends FormRequest
             'email.unique' => 'L\'email existe deja',
             'password.min' => 'Le mot de passe doit contenir au moins 8 caracteres',
             'firstname.min' => 'Le prénom doit contenir au moins 3 caracteres',
-            'lastname.min' => 'Le nom doit contenir au moins 3 caracteres',       
+            'lastname.min' => 'Le nom doit contenir au moins 3 caracteres',     
+            'phone.unique' => 'Le numéro de téléphone existe deja',
+            'phone.min' => 'Le numéro de téléphone doit contenir au moins 8 caracteres',    
         ];
     }
 }
