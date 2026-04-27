@@ -35,6 +35,13 @@ class TeamMateController extends Controller
            $team = Team::where('user_id', Auth::id())->first();
            
            if ($team) {
+                if ($team->members()->count() >= 5) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'L\'équipe a atteint le nombre maximum de 5 membres.',
+                    ], 422);
+                }
+
                 $member = Member::create([
                     'team_id' => $team->id,
                     'team_mate_id' => $teamMate->id,

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\AuthController;
@@ -33,5 +34,9 @@ Route::prefix("v1")->group(function () {
     Route::apiResource('interesteds', InterestedController::class)->middleware('auth:sanctum');
     Route::apiResource('team-mates', TeamMateController::class)->middleware('auth:sanctum');
     Route::apiResource('members', MemberController::class)->middleware('auth:sanctum');
+
+    Route::prefix("admin")->middleware(['auth:sanctum', 'admin'])->group(function () {
+        Route::post('teams/from-interesteds', [AdminController::class, 'storeTeamFromInteresteds']);
+    });
 
 });
