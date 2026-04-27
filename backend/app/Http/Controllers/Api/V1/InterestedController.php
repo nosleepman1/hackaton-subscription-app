@@ -16,7 +16,17 @@ class InterestedController extends Controller
     public function index()
     {
         try {
-            $interesteds = Interested::with('user', 'project')->get();
+            $user = Auth::user();
+
+            if ($user instanceof \App\Models\Admin) {
+                $query = Interested::with('user', 'project');
+                if (request()->has('project_id')) {
+                    $query->where('project_id', request('project_id'));
+                }
+                $interesteds = $query->get();
+            } else {
+                $interesteds = Interested::where('user_id', $user->id)->with('user', 'project')->get();
+            }
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

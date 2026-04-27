@@ -34,4 +34,8 @@ Route::prefix("v1")->group(function () {
     Route::apiResource('team-mates', TeamMateController::class)->middleware('auth:sanctum');
     Route::apiResource('members', MemberController::class)->middleware('auth:sanctum');
 
+    Route::prefix("admin")->middleware(['auth:sanctum', 'admin'])->group(function () {
+        Route::post('teams/from-interesteds', [\App\Http\Controllers\Api\V1\AdminController::class, 'storeTeamFromInteresteds']);
+    });
+
 });

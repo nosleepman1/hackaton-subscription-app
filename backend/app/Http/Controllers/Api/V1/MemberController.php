@@ -62,7 +62,16 @@ class MemberController extends Controller
     {
         try {
             $data = $request->validated();
-            $member = Member::create($request->validated());
+            
+            $team = Team::find($data['team_id']);
+            if ($team && $team->members()->count() >= 5) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'L\'équipe a atteint le nombre maximum de 5 membres.',
+                ], 422);
+            }
+
+            $member = Member::create($data);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

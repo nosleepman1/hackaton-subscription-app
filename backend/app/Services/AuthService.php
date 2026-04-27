@@ -32,9 +32,22 @@ class AuthService
 
     public function login($data) {
 
+        // Vérifie d'abord si c'est un administrateur
+        $admin = \App\Models\Admin::where('email', $data['email'])->first();
+        if ($admin && Hash::check($data['password'], $admin->password)) {
+            $token = $admin->createToken('admin-token')->plainTextToken;
+            return [
+                "success" => true,
+                "message" => "Connexion admin réussie",
+                "token" => $token,
+                "role" => "admin",
+            ];
+        }
+
+        // Sinon vérifie si c'est un utilisateur normal
         $user = User::where('email', $data['email'])->first();
 
-        if(!$user || !Hash::check($data['password'], $user['password'])) {
+        if(!$user || !Hash::check($data['password'], $user->password)) {
             return [
                 "success" => false,
                 "message" => "Adresse mail ou mot de passe incorrect"
@@ -45,8 +58,9 @@ class AuthService
 
         return [
             "success" => true,
-            'message' => "Connexion reussie",
-            'token' => $token
+            'message' => "Connexion réussie",
+            'token' => $token,
+            'role' => 'user',
         ];  
     }
 
