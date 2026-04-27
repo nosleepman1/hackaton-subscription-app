@@ -16,7 +16,19 @@ class TeamController extends Controller
      */
     public function index()
     {
-        $teams = Team::with('user')->get();
+        $user = Auth::user();
+
+        if ($user instanceof \App\Models\Admin) {
+            $teams = Team::with('user')->get();
+        } else {
+            // Normal user: see teams they created or are a member of
+            $teams = Team::where('user_id', $user->id)
+                ->orWhereHas('members', function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                })
+                ->with('user')
+                ->get();
+        }
 
         return response()->json([
             'success'=> true,
