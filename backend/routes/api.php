@@ -28,8 +28,8 @@ Route::prefix("v1")->group(function () {
     });
 
 
-    Route::apiResource('themes', ThemeController::class)->middleware('auth:sanctum');
-    Route::apiResource('projects', ProjectController::class)->middleware('auth:sanctum');
+    Route::apiResource('themes', ThemeController::class);
+    Route::apiResource('projects', ProjectController::class);
     Route::apiResource('teams', TeamController::class)->middleware('auth:sanctum');
     Route::apiResource('interesteds', InterestedController::class)->middleware('auth:sanctum');
     Route::apiResource('team-mates', TeamMateController::class)->middleware('auth:sanctum');
