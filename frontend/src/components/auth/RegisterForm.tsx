@@ -1,17 +1,24 @@
 // Formulaire d'inscription avec validation react-hook-form + zod
 
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { motion } from 'framer-motion'
-import { FiMail, FiLock, FiUser, FiUserPlus } from 'react-icons/fi'
+import { FiMail, FiLock, FiUser, FiUserPlus, FiPhone, FiHash, FiBook, FiLayers } from 'react-icons/fi'
 import { useAuth } from '../../hooks/useAuth'
+import axiosClient from '../../api/axiosClient'
 
 const registerSchema = z.object({
-  name: z.string().min(2, 'Minimum 2 caractères'),
+  firstname: z.string().min(3, 'Minimum 3 caractères'),
+  lastname: z.string().min(3, 'Minimum 3 caractères'),
   email: z.string().email('Email invalide'),
-  password: z.string().min(6, 'Minimum 6 caractères'),
-  password_confirmation: z.string().min(6, 'Minimum 6 caractères'),
+  password: z.string().min(8, 'Minimum 8 caractères'),
+  password_confirmation: z.string().min(8, 'Minimum 8 caractères'),
+  phone: z.string().min(8, 'Minimum 8 caractères'),
+  grade: z.string().min(1, 'Le niveau est requis'),
+  filiere: z.string().min(1, 'La filière est requise'),
+  matricule: z.string().min(1, 'Le matricule est requis'),
 }).refine((data) => data.password === data.password_confirmation, {
   message: 'Les mots de passe ne correspondent pas',
   path: ['password_confirmation'],
@@ -23,11 +30,24 @@ interface RegisterFormProps {
   onSuccess?: () => void
 }
 
+interface Option {
+  value: string
+  label: string
+}
+
 const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
   const { register: registerUser, loading, error } = useAuth()
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   })
+
+  const [grades, setGrades] = useState<Option[]>([])
+  const [filieres, setFilieres] = useState<Option[]>([])
+
+  useEffect(() => {
+    axiosClient.get('/auth/grades').then(res => setGrades(res.data))
+    axiosClient.get('/auth/filieres').then(res => setFilieres(res.data))
+  }, [])
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
@@ -38,21 +58,39 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
     }
   }
 
+  const inputClass = "w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border-app)] text-[var(--text)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all"
+  const selectClass = "w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border-app)] text-[var(--text)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all appearance-none"
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-      {/* Nom */}
-      <div>
-        <label className="block text-sm font-medium text-[var(--text)] mb-1.5">Nom complet</label>
-        <div className="relative">
-          <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={18} />
-          <input
-            {...register('name')}
-            type="text"
-            placeholder="Jean Dupont"
-            className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border-app)] text-[var(--text)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all"
-          />
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {/* Prénom & Nom */}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-sm font-medium text-[var(--text)] mb-1.5">Prénom</label>
+          <div className="relative">
+            <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={18} />
+            <input
+              {...register('firstname')}
+              type="text"
+              placeholder="Jean"
+              className={inputClass}
+            />
+          </div>
+          {errors.firstname && <p className="text-red-400 text-xs mt-1">{errors.firstname.message}</p>}
         </div>
-        {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>}
+        <div>
+          <label className="block text-sm font-medium text-[var(--text)] mb-1.5">Nom</label>
+          <div className="relative">
+            <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={18} />
+            <input
+              {...register('lastname')}
+              type="text"
+              placeholder="Dupont"
+              className={inputClass}
+            />
+          </div>
+          {errors.lastname && <p className="text-red-400 text-xs mt-1">{errors.lastname.message}</p>}
+        </div>
       </div>
 
       {/* Email */}
@@ -64,10 +102,70 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
             {...register('email')}
             type="email"
             placeholder="votre@email.com"
-            className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border-app)] text-[var(--text)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all"
+            className={inputClass}
           />
         </div>
         {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>}
+      </div>
+
+      {/* Téléphone & Matricule */}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-sm font-medium text-[var(--text)] mb-1.5">Téléphone</label>
+          <div className="relative">
+            <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={18} />
+            <input
+              {...register('phone')}
+              type="tel"
+              placeholder="77 123 45 67"
+              className={inputClass}
+            />
+          </div>
+          {errors.phone && <p className="text-red-400 text-xs mt-1">{errors.phone.message}</p>}
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-[var(--text)] mb-1.5">Matricule</label>
+          <div className="relative">
+            <FiHash className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={18} />
+            <input
+              {...register('matricule')}
+              type="text"
+              placeholder="20210001"
+              className={inputClass}
+            />
+          </div>
+          {errors.matricule && <p className="text-red-400 text-xs mt-1">{errors.matricule.message}</p>}
+        </div>
+      </div>
+
+      {/* Niveau & Filière */}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-sm font-medium text-[var(--text)] mb-1.5">Niveau</label>
+          <div className="relative">
+            <FiLayers className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={18} />
+            <select {...register('grade')} className={selectClass}>
+              <option value="">Choisir...</option>
+              {grades.map(g => (
+                <option key={g.value} value={g.value}>{g.label}</option>
+              ))}
+            </select>
+          </div>
+          {errors.grade && <p className="text-red-400 text-xs mt-1">{errors.grade.message}</p>}
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-[var(--text)] mb-1.5">Filière</label>
+          <div className="relative">
+            <FiBook className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={18} />
+            <select {...register('filiere')} className={selectClass}>
+              <option value="">Choisir...</option>
+              {filieres.map(f => (
+                <option key={f.value} value={f.value}>{f.label}</option>
+              ))}
+            </select>
+          </div>
+          {errors.filiere && <p className="text-red-400 text-xs mt-1">{errors.filiere.message}</p>}
+        </div>
       </div>
 
       {/* Mot de passe */}
@@ -79,7 +177,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
             {...register('password')}
             type="password"
             placeholder="••••••••"
-            className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border-app)] text-[var(--text)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all"
+            className={inputClass}
           />
         </div>
         {errors.password && <p className="text-red-400 text-xs mt-1">{errors.password.message}</p>}
@@ -94,7 +192,7 @@ const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
             {...register('password_confirmation')}
             type="password"
             placeholder="••••••••"
-            className="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border-app)] text-[var(--text)] placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition-all"
+            className={inputClass}
           />
         </div>
         {errors.password_confirmation && <p className="text-red-400 text-xs mt-1">{errors.password_confirmation.message}</p>}

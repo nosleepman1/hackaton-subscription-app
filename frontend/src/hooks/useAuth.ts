@@ -23,12 +23,7 @@ export const useAuth = () => {
     }
   }
 
-  const register = async (data: {
-    name: string
-    email: string
-    password: string
-    password_confirmation: string
-  }) => {
+  const register = async (data: Record<string, string>) => {
     setLoading(true)
     setError(null)
     try {
