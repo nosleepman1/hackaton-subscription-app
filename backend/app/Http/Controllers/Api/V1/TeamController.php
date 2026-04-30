@@ -7,131 +7,50 @@ use App\Http\Requests\Team\StoreTeamRequest;
 use App\Http\Requests\Team\UpdateTeamRequest;
 use App\Models\Member;
 use App\Models\Team;
+use App\Services\TeamService;
 use Illuminate\Support\Facades\Auth;
 
 class TeamController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
+    public function __construct(private TeamService $teamService){}
+
     public function index()
     {
-        $user = Auth::user();
-
-        if ($user instanceof \App\Models\Admin) {
-            $teams = Team::with('user')->get();
-        } else {
-            // Normal user: see teams they created or are a member of
-            $teams = Team::where('user_id', $user->id)
-                ->orWhereHas('members', function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
-                })
-                ->with('user')
-                ->get();
-        }
-
-        return response()->json([
-            'success'=> true,
-            'message' => "Liste des équipes",
-            'data' => $teams,
-        ]);
+        $response = $this->teamService->getTeams();
+        return response()->json($response);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(StoreTeamRequest $request)
     {
-        try {
-            $captain = Auth::user();
-            $data = $request->validated();  
-            $data['user_id'] = $captain->id;
-            $team = Team::create($data);
-            if($team) {
-                $member = Member::create([
-                    'team_id' => $team->id,
-                    'user_id' => $captain->id,
-                ]);
-            }
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de l\'ajout de l\'equipe',
-                'error' => $e->getMessage(),
-            ]);
+        $response = $this->teamService->createTeam($request->validated());
+        
+        if($response['success']) {
+            return response()->json($response, 201);
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Equipe ajoutée avec succès',
-            'data' => [$team, $member],
-
-        ]);
+        
+        return response()->json($response, 500);
     }
 
-    /**
-     * Display the specified resource.
-     */
+  
     public function show(Team $team)
     {
-        try {
-            $team = Team::with('user')->find($team->id);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la recherche de l\'equipe',
-                'error' => $e->getMessage(),
-            ]);
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Equipe trouvée avec succès',
-            'data' => $team,
-        ]);
+        $response = $this->teamService->showTeam($team);
+        return response()->json($response); 
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(UpdateTeamRequest $request, Team $team)
     {
-        try {
-            $team = $team->update($request->validated());
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la modification de l\'equipe',
-                'error' => $e->getMessage(),
-            ]);
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Equipe modifiée avec succès',
-            'data' => $team,
-        ]);
+        $response = $this->teamService->updateTeam($request->validated(), $team);
+        return response()->json($response);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
     public function destroy(Team $team)
     {
-        try {
-            $team->delete();
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la suppression de l\'equipe',
-                'error' => $e->getMessage(),
-            ]);
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Equipe supprimée avec succès',
-            'data' => $team,
-        ]);
+        $response = $this->teamService->deleteTeam($team);
+        return response()->json($response);
     }
 }
