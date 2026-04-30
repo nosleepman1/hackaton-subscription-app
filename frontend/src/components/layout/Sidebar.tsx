@@ -124,7 +124,7 @@ const Sidebar = () => {
             <div className="flex items-center gap-3 px-3 py-2">
               <div className="w-8 h-8 rounded-full bg-[var(--accent)]/20 flex items-center justify-center flex-shrink-0">
                 <span className="text-sm font-semibold text-[var(--accent)]">
-                  {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                  {user?.firstname?.charAt(0)?.toUpperCase() || 'U'}
                 </span>
               </div>
               <AnimatePresence>
@@ -135,7 +135,7 @@ const Sidebar = () => {
                     exit={{ opacity: 0 }}
                     className="flex-1 min-w-0"
                   >
-                    <p className="text-sm font-medium text-[var(--text)] truncate">{user?.name}</p>
+                    <p className="text-sm font-medium text-[var(--text)] truncate">{user?.firstname} {user?.lastname}</p>
                     <p className="text-xs text-[var(--text-muted)] truncate">{user?.email}</p>
                   </motion.div>
                 )}

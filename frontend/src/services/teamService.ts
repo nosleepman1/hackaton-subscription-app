@@ -42,9 +42,9 @@ export const teamService = {
       params: { project_id: projectId }
     })
     const data = response.data.data ?? response.data
-    return Array.isArray(data) ? data.map((i: { id: number; user: { id: number; name: string; email: string } }) => ({
+    return Array.isArray(data) ? data.map((i: { id: number; user: { id: number; firstname: string; lastname: string; email: string } }) => ({
       id: i.id,
-      name: i.user?.name ?? 'Inconnu',
+      name: `${i.user?.firstname ?? ''} ${i.user?.lastname ?? ''}`.trim() || 'Inconnu',
       email: i.user?.email ?? '',
       interested_id: i.id,
     })) : []

@@ -9,7 +9,8 @@ type Role = 'admin' | 'user' | null
 
 interface User {
   id: number
-  name: string
+  firstname: string
+  lastname: string
   email: string
   role: Role
 }
@@ -21,12 +22,7 @@ interface AuthContextType {
   isAuthenticated: boolean
   isLoading: boolean
   login: (credentials: { email: string; password: string }) => Promise<void>
-  register: (data: {
-    name: string
-    email: string
-    password: string
-    password_confirmation: string
-  }) => Promise<void>
+  register: (data: Record<string, string>) => Promise<void>
   logout: () => Promise<void>
 }
 
@@ -80,24 +76,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser({ ...userRes.data, role: data.role })
     } catch {
       // Fallback : on met un user minimal
-      setUser({ id: 0, name: '', email: credentials.email, role: data.role })
+      setUser({ id: 0, firstname: '', lastname: '', email: credentials.email, role: data.role })
     }
   }
 
-  const register = async (registerData: {
-    name: string
-    email: string
-    password: string
-    password_confirmation: string
-  }) => {
+  const register = async (registerData: Record<string, string>) => {
     // Backend: POST /v1/auth/register → { success, message }
-    const { data } = await axiosClient.post('/auth/register', registerData)
-    if (!data.success) {
-      throw new Error(data.message || "Échec de l'inscription")
+    try {
+      const { data } = await axiosClient.post('/auth/register', registerData)
+      if (!data.success) {
+        throw new Error(data.message || "Échec de l'inscription")
+      }
+      // Le backend ne retourne pas de token à l'inscription, il faut se connecter après
+      // On fait un login automatique
+      await login({ email: registerData.email, password: registerData.password })
+    } catch (err: unknown) {
+      // Extraire les erreurs de validation Laravel (422)
+      if (typeof err === 'object' && err !== null && 'response' in err) {
+        const axiosErr = err as { response?: { data?: { message?: string; errors?: Record<string, string[]> } } }
+        const validationErrors = axiosErr.response?.data?.errors
+        if (validationErrors) {
+          const messages = Object.values(validationErrors).flat().join('. ')
+          throw new Error(messages)
+        }
+        if (axiosErr.response?.data?.message) {
+          throw new Error(axiosErr.response.data.message)
+        }
+      }
+      throw err
     }
-    // Le backend ne retourne pas de token à l'inscription, il faut se connecter après
-    // On fait un login automatique
-    await login({ email: registerData.email, password: registerData.password })
   }
 
   const logout = async () => {
