@@ -42,7 +42,7 @@ class TeamCreatedNotification extends Notification
     {
         return (new MailMessage)
             ->subject("Félicitations, votre équipe a été créée !")
-            ->line("Bonjour " . $this->user->name)
+            ->line("Bonjour " . $this->user->firstname . " " . $this->user->lastname)
             ->line("Votre équipe " . $this->team->name . " a été créée avec succès !")
             ->line('Nous vous remercions de votre participation au hackathon');
     }
