@@ -31,7 +31,7 @@ const DashboardPage = () => {
       {/* Greeting */}
       <div className="mb-8">
         <h1 className="text-2xl sm:text-3xl font-display font-bold text-[var(--text)]">
-          {greeting}, {user?.name?.split(' ')[0]} 👋
+          {greeting}, {user?.firstname} 👋
         </h1>
         <p className="text-[var(--text-muted)] mt-1">Voici un résumé de votre activité.</p>
       </div>
