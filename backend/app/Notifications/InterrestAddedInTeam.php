@@ -35,16 +35,4 @@ class InterrestAddedInTeam extends Notification
             ->line($this->user->name.' '.$this->user->last_name.' vient de vous ajouter comme membre de son équipe '.$this->team->name)
             ->line('Merci!');
     }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
-        return [
-            
-        ];
-    }
 }

@@ -59,7 +59,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [])
 
   const login = async (credentials: { email: string; password: string }) => {
-    // Backend: POST /v1/auth/login → { success, message, token, role }
     const { data } = await axiosClient.post('/auth/login', credentials)
     if (!data.success) {
       throw new Error(data.message || 'Échec de la connexion')
@@ -68,20 +67,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('auth_role', data.role)
     setToken(data.token)
 
-    // Récupère les infos utilisateur avec le nouveau token
     try {
       const userRes = await axiosRoot.get('/user', {
         headers: { Authorization: `Bearer ${data.token}` }
       })
       setUser({ ...userRes.data, role: data.role })
     } catch {
-      // Fallback : on met un user minimal
       setUser({ id: 0, firstname: '', lastname: '', email: credentials.email, role: data.role })
     }
   }
 
   const register = async (registerData: Record<string, string>) => {
-    // Backend: POST /v1/auth/register → { success, message }
     try {
       const { data } = await axiosClient.post('/auth/register', registerData)
       if (!data.success) {
