@@ -13,12 +13,9 @@ use App\Services\MemberServices;
 
 class MemberController extends Controller
 {
-    
-
     public function __construct(private readonly MemberServices $memberServices){}
 
-    public function index()
-    {
+    public function index(){
         $response = $this->memberServices->getAllMembers();
 
         if($response['success']){  
@@ -27,8 +24,7 @@ class MemberController extends Controller
         return response()->json($response, 422);                
     }
 
-    public function showByCaptain(Team $team)
-    {
+    public function showByCaptain(Team $team){
         $response = $this->memberServices->getTeamMembers($team->id); 
 
         if($response['success']){  
@@ -40,8 +36,7 @@ class MemberController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreMemberRequest $request)
-    {
+    public function store(StoreMemberRequest $request){
         $response = $this->memberServices->addMember($request->validated());   
 
         if($response['success']){  
@@ -53,8 +48,7 @@ class MemberController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Member $member)
-    {
+    public function show(Member $member){
         $response = $this->memberServices->showMember($member); 
 
         if($response['success']){
@@ -66,8 +60,7 @@ class MemberController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMemberRequest $request, Member $member)
-    {
+    public function update(UpdateMemberRequest $request, Member $member){
         $response = $this->memberServices->updateMember($member, $request->validated());  
 
         if($response['success']){
@@ -80,8 +73,7 @@ class MemberController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Member $member)
-    {
+    public function destroy(Member $member) {   
         $response = $this->memberServices->deleteMember($member);  
 
         if($response['success']){  

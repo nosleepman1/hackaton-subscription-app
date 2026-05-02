@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\TeamCreatedEvent;
+use App\Http\Resources\TeamResource;
 use App\Models\Member;
 use App\Models\Team;
 use Illuminate\Support\Facades\Auth;
@@ -19,8 +20,11 @@ class TeamService
 
     public function createTeam(array $data){
         try {
+
             $captain = Auth::user();
+
             $data['user_id'] = $captain->id;
+
             $team = Team::create($data);
             if($team) {
                 $member = Member::create([
@@ -47,17 +51,14 @@ class TeamService
     }
 
     public function getTeams(){
+        
         $user = Auth::user();
 
         if ($user instanceof Admin) {
-            $teams = Team::with('user')->get();
+            $teams = TeamResource::collection(Team::with('user')->paginate(10));
         } else {
-            $teams = Team::where('user_id', $user->id)
-                ->orWhereHas('members', function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
-                })
-                ->with('user')
-                ->get();
+            $teams = new TeamResource(Team::where('user_id', $user->id)
+                        ->with('members', 'user')->get());
         }
 
         return [

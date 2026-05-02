@@ -10,8 +10,7 @@ use Illuminate\Http\Request;
 
 class HackathonController extends Controller
 {
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $query = Hackathon::query();
 
         if ($request->has('start_date')) {
@@ -40,8 +39,8 @@ class HackathonController extends Controller
 
 
 
-    public function store(StoreHackathonResquest $request)
-    {
+    public function store(StoreHackathonResquest $request) {
+       
         $hackathon = Hackathon::create($request->validated());
 
         return response()->json([
@@ -51,8 +50,7 @@ class HackathonController extends Controller
         ]);
     }
 
-    public function show(Hackathon $hackathon)
-    {
+    public function show(Hackathon $hackathon){
         return response()->json([
             'success' => true,
             'message' => 'Hackathon récupéré avec succès',
@@ -61,8 +59,7 @@ class HackathonController extends Controller
     }
 
 
-    public function update(StoreHackathonResquest $request, Hackathon $hackathon)
-    {
+    public function update(StoreHackathonResquest $request, Hackathon $hackathon) {
         $hackathon->update($request->validated());
 
         return response()->json([
@@ -74,8 +71,7 @@ class HackathonController extends Controller
 
 
 
-    public function destroy(Hackathon $hackathon)
-    {
+    public function destroy(Hackathon $hackathon) {
         if (!$hackathon) {
             return response()->json([
                 'success' => false,

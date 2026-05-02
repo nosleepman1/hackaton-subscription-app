@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Project\StoreProjectRequest;
 use App\Http\Requests\Project\UpdateProjectRequest;
 use App\Models\Project;
+use App\Models\Theme;
 
 class ProjectController extends Controller
 {
@@ -21,12 +22,26 @@ class ProjectController extends Controller
     }
 
     /**
+     * Project belongs to a specify theme
+     */
+    public function indexByTheme(Theme $theme) {
+        
+        $projects = Project::where('deleted_at', null)->where('theme_id', $theme->id)->orderBy('name', 'asc')->get();
+        
+        return response()->json([
+            'message' => 'Projets récupérés avec succès',
+            'projects' => $projects,
+        ]); 
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProjectRequest $request)
-    {
+    public function store(StoreProjectRequest $request) {
         $data = $request->validated();
+
         $project = Project::create($data);
+
         return response()->json([
             'message' => 'Projet créé avec succès',
             'project' => $project,
@@ -36,8 +51,7 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Project $project)
-    {
+    public function show(Project $project) {
         return response()->json([
             'message' => 'Projet récupéré avec succès',
             'project' => $project, 
@@ -47,8 +61,7 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProjectRequest $request, Project $project)
-    {
+    public function update(UpdateProjectRequest $request, Project $project) {
         try {
             $data = $request->validated();
             $project->update($data);
@@ -67,8 +80,7 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Project $project)
-    {
+    public function destroy(Project $project) {
         $project->delete();
         return response()->json([
             'message' => 'Projet supprimé avec succès',

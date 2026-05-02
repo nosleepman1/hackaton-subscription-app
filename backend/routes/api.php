@@ -29,14 +29,19 @@ Route::prefix("v1")->group(function () {
 
 
     Route::apiResource('themes', ThemeController::class);
-    Route::apiResource('projects', ProjectController::class);
     Route::apiResource('teams', TeamController::class)->middleware('auth:sanctum');
     Route::apiResource('interesteds', InterestedController::class)->middleware('auth:sanctum');
     Route::apiResource('team-mates', TeamMateController::class)->middleware('auth:sanctum');
     Route::apiResource('members', MemberController::class)->middleware('auth:sanctum');
 
+
     Route::prefix("admin")->middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::post('teams/from-interesteds', [AdminController::class, 'storeTeamFromInteresteds']);
     });
+
+    Route::prefix("projects")->group(function () {
+        Route::apiResource('', ProjectController::class);
+        Route::get('/by-theme/{theme}', [ProjectController::class, 'indexByTheme']);
+    }); 
 
 });
