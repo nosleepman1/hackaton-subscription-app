@@ -6,37 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Models\Interested;
 use App\Http\Requests\Interested\StoreInterestedRequest;
 use App\Http\Requests\Interested\UpdateInterestedRequest;
+use App\Http\Resources\InterrestResource;
 use App\Models\Admin;
+use App\Services\InterrestServices;
 use Illuminate\Support\Facades\Auth;
 
 class InterestedController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct(private readonly InterrestServices $interrestServices){}
+    
     public function index()
     {
-        try {
-            $user = Auth::user();
-
-            if ($user instanceof Admin) {
-                $response = Interested::all();
-            } else {
-                $response = Interested::where('user_id', $user->id)->with('user', 'project')->get();
-            }
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la récupération',
-                'error' => $e->getMessage(),
-            ]);
+        $response = $this->interrestServices->index();
+        
+        if($response['success']){
+            return response()->json($response);
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Liste des personnes intéressées',
-            'data' => $response,
-        ]);
+        return response()->json($response, 422);
     }
 
     /**
@@ -44,24 +30,12 @@ class InterestedController extends Controller
      */
     public function store(StoreInterestedRequest $request)
     {
-        try {
-            $interested = Interested::create([
-                'user_id' => Auth::id(),
-                'project_id' => $request->project_id,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de l\'ajout',
-                'error' => $e->getMessage(),
-            ]);
-        }
+        $response = $this->interrestServices->store($request->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Intérêt marqué avec succès',
-            'data' => $interested,
-        ]);
+        if($response['success']){
+            return response()->json($response);
+        }
+        return response()->json($response, 422);
     }
 
     /**
@@ -69,21 +43,12 @@ class InterestedController extends Controller
      */
     public function show(Interested $interested)
     {
-        try {
-            $interested->load('user', 'project');
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la récupération',
-                'error' => $e->getMessage(),
-            ]);
-        }
+        $response = $this->interrestServices->show($interested);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Détails récupérés avec succès',
-            'data' => $interested,
-        ]);
+        if($response['success']){
+            return response()->json($response);
+        }
+        return response()->json($response, 422);
     }
 
     /**
@@ -91,10 +56,12 @@ class InterestedController extends Controller
      */
     public function update(UpdateInterestedRequest $request, Interested $interested)
     {
-        return response()->json([
-            'success' => false,
-            'message' => 'Action non supportée',
-        ], 405);
+       $response = $this->interrestServices->update($interested, $request->validated());
+
+       if($response['success']){
+           return response()->json($response);
+       }
+       return response()->json($response, 422); 
     }
 
     /**
@@ -102,19 +69,11 @@ class InterestedController extends Controller
      */
     public function destroy(Interested $interested)
     {
-        try {
-            $interested->delete();
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la suppression',
-                'error' => $e->getMessage(),
-            ]);
-        }
+        $response = $this->interrestServices->delete($interested);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Intérêt supprimé avec succès',
-        ]);
+        if($response['success']){
+            return response()->json($response);
+        }
+        return response()->json($response, 422); 
     }
 }

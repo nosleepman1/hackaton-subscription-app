@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\Filiere;
 use App\Enums\Grade;
 use App\Events\UserRegistered;
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -21,8 +22,10 @@ class AuthService
                 "message" => "Adresse mail deja existante"
             ];
         }
+
         $data['password'] = Hash::make($data['password']);
         $user = User::create($data);
+
         event(new UserRegistered($user));
         return [
             "success" => true,
@@ -33,7 +36,8 @@ class AuthService
     public function login($data) {
 
         // Vérifie d'abord si c'est un administrateur
-        $admin = \App\Models\Admin::where('email', $data['email'])->first();
+        $admin = Admin::where('email', $data['email'])->first();
+       
         if ($admin && Hash::check($data['password'], $admin->password)) {
             $token = $admin->createToken('admin-token')->plainTextToken;
             return [
@@ -44,7 +48,6 @@ class AuthService
             ];
         }
 
-        // Sinon vérifie si c'est un utilisateur normal
         $user = User::where('email', $data['email'])->first();
 
         if(!$user || !Hash::check($data['password'], $user->password)) {
