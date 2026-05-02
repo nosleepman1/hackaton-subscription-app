@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Project\StoreProjectRequest;
 use App\Http\Requests\Project\UpdateProjectRequest;
 use App\Models\Project;
+use App\Models\Theme;
 
 class ProjectController extends Controller
 {
@@ -21,12 +22,25 @@ class ProjectController extends Controller
     }
 
     /**
+     * Project belongs to a specify theme
+     */
+    public function indexByTheme(Theme $theme) {
+        $projects = Project::where('deleted_at', null)->where('theme_id', $theme->id)->orderBy('name', 'asc')->get();
+        
+        return response()->json([
+            'message' => 'Projets récupérés avec succès',
+            'projects' => $projects,
+        ]); 
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProjectRequest $request)
-    {
+    public function store(StoreProjectRequest $request) {
         $data = $request->validated();
+
         $project = Project::create($data);
+
         return response()->json([
             'message' => 'Projet créé avec succès',
             'project' => $project,
