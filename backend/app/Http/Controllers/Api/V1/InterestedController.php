@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Interested;
 use App\Http\Requests\Interested\StoreInterestedRequest;
 use App\Http\Requests\Interested\UpdateInterestedRequest;
+use App\Models\Admin;
 use Illuminate\Support\Facades\Auth;
 
 class InterestedController extends Controller
@@ -18,14 +19,10 @@ class InterestedController extends Controller
         try {
             $user = Auth::user();
 
-            if ($user instanceof \App\Models\Admin) {
-                $query = Interested::with('user', 'project');
-                if (request()->has('project_id')) {
-                    $query->where('project_id', request('project_id'));
-                }
-                $interesteds = $query->get();
+            if ($user instanceof Admin) {
+                $response = Interested::all();
             } else {
-                $interesteds = Interested::where('user_id', $user->id)->with('user', 'project')->get();
+                $response = Interested::where('user_id', $user->id)->with('user', 'project')->get();
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -38,7 +35,7 @@ class InterestedController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Liste des personnes intéressées',
-            'data' => $interesteds,
+            'data' => $response,
         ]);
     }
 
