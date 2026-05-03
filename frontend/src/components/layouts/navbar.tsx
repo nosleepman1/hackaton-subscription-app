@@ -21,6 +21,7 @@ import {
   BookOpen,
   Hexagon,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const navItems = [
   {
@@ -139,8 +140,8 @@ export default function Navbar({ activeHref = "/" }: NavbarProps) {
                 return (
                   <NavigationMenuItem key={item.label}>
                     <NavigationMenuLink asChild>
-                      <a
-                        href={item.href}
+                      <Link
+                        to={item.href}
                         onClick={() => setActive(item.href)}
                         className={cn(
                           "flex items-center gap-1.5 h-9 px-3 rounded-lg text-[13.5px] font-medium transition-all",
@@ -151,7 +152,7 @@ export default function Navbar({ activeHref = "/" }: NavbarProps) {
                       >
                         <Icon className="w-3.5 h-3.5" />
                         {item.label}
-                      </a>
+                      </Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 );
@@ -162,13 +163,13 @@ export default function Navbar({ activeHref = "/" }: NavbarProps) {
           {/* Actions */}
           <div className="flex items-center gap-2 shrink-0">
             <Button variant="ghost" size="sm" className="text-[13px] font-medium">
-              Sign in
+              <Link to="/login">Se connecter</Link>
             </Button>
             <Button
               size="sm"
               className="text-[13px] font-semibold bg-orange-500 hover:bg-orange-600 text-white rounded-lg px-4"
             >
-              Join now →
+              <Link to="/register">S'inscrire</Link>
             </Button>
           </div>
 
