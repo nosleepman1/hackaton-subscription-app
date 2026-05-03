@@ -19,7 +19,9 @@ class MemberServices
             ]);
 
      
-            event(new MemberCreatedEvent($member, Auth::user()));
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+            event(new MemberCreatedEvent($member, $user));
 
             
             
