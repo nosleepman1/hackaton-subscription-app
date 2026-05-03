@@ -13,10 +13,14 @@ class MemberServices
 
             $member = Member::create([
                 'team_id' => $data['team_id'],
-                'user_id' => $data['user_id'],
+                'user_id' => $data['user_id'] ?? null,
+                'team_mate_id' => $data['team_mate_id'] ?? null,
             ]);
 
-            event(new MemberCreatedEvent($member));
+            // check if notifiable comes from user_id or team_mate_id
+            if($member->user_id){
+                event(new MemberCreatedEvent($member));
+            }
 
             
             

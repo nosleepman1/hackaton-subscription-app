@@ -11,8 +11,10 @@ use Illuminate\Support\Facades\Log;
 class TeamMateServices
 {
 
-    public function createTeamMate(array $data) {
+    public function __construct(private MemberServices $memberServices) {}
 
+
+    public function createTeamMate(array $data) {
         try {
             $teamMate = TeamMate::create($data);
 
@@ -27,10 +29,11 @@ class TeamMateServices
                     ];
                 }
 
-                $member = Member::create([
-                    'team_mate_id' => $teamMate->id,
+                $response = $this->memberServices->addMember([
                     'team_id' => $team->id,
+                    'team_mate_id' => $teamMate->id,
                 ]);
+                $member = $response['data'];
 
             } else {
                 $teamMate->delete();

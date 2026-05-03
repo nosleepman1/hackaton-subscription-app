@@ -23,8 +23,7 @@ class MemberCreatedNotification extends Notification
      *
      * @return array<int, string>
      */
-    public function via(object $notifiable): array
-    {
+    public function via(object $notifiable): array {
         return ['mail'];
     }
 
@@ -41,15 +40,4 @@ class MemberCreatedNotification extends Notification
             ->line('Merci pour votre participation!');
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
-        return [
-            //
-        ];
-    }
 }
