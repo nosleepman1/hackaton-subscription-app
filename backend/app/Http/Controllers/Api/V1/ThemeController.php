@@ -9,6 +9,11 @@ use App\Http\Requests\Theme\UpdateThemeRequest;
 
 class ThemeController extends Controller
 {
+
+    public function __construct() {
+        $this->authorizeResource(Theme::class);
+    }
+    
     /**
      * Display a listing of the resource.
      */

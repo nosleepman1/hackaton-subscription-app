@@ -10,6 +10,11 @@ use App\Models\Theme;
 
 class ProjectController extends Controller
 {
+    public function __construct() {
+        $this->authorizeResource(Project::class);
+    }
+
+
     /**
      * Display a listing of the resource.
      */

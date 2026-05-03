@@ -107,6 +107,56 @@ class TeamMateServices
         }
     } 
     
-    public function getTeamMateById($id) {
+    public function getTeamMateById(int $id) {
+        try {
+            $teamMate = TeamMate::where('id', $id)->get();
+            
+            return [
+                'success' => true,
+                'message' => 'Team mate récupéré avec succès',
+                'data' => $teamMate,
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Erreur lors de la récupération du team mate',
+                'error' => $e->getMessage(),
+            ];
+        }
+    }
+
+    public function updateTeamMate(array $data, TeamMate $teamMate) {
+        try {
+            $teamMate->update($data);
+           
+           $team = Team::where('user_id', Auth::id())->first();
+           
+           if ($team) {
+                if ($team->members()->count() >= 5) {
+                    return [
+                        'success' => false,
+                        'message' => 'L\'équipe a atteint le nombre maximum de 5 membres.',
+                    ];
+                }
+
+                $member = Member::create([
+                    'team_id' => $team->id,
+                    'team_mate_id' => $teamMate->id,
+                ]);
+           }
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Erreur lors de la mise à jour du coéquipier',
+                'error' => $e->getMessage(),
+            ];
+        }
+
+        return [
+            'success' => true,
+            'message' => 'Coéquipier mis à jour avec succès',
+            'data' => $teamMate,
+        ];
+    }
         
 }

@@ -2,9 +2,11 @@
 
 namespace App\Policies;
 
+use App\Models\Admin;
 use App\Models\Theme;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class ThemePolicy
 {
@@ -29,7 +31,7 @@ class ThemePolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return Auth::user() instanceof Admin;
     }
 
     /**
@@ -37,7 +39,7 @@ class ThemePolicy
      */
     public function update(User $user, Theme $theme): bool
     {
-        return false;
+        return Auth::user() instanceof Admin;
     }
 
     /**
@@ -45,7 +47,7 @@ class ThemePolicy
      */
     public function delete(User $user, Theme $theme): bool
     {
-        return false;
+        return Auth::user() instanceof Admin;
     }
 
     /**
