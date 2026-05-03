@@ -23,8 +23,8 @@ class MemberCreatedListener implements ShouldQueue
 
         $notifiable = $event->member->user_id 
             ? $event->member->user 
-            : $event->member->team_mate;
+            : $event->member->teamMate;
 
-        $notifiable->notify(new MemberCreatedNotification($event->member->team, $notifiable));
+        $notifiable->notify(new MemberCreatedNotification($event->member->team, $event->addedBy));
     }
 }

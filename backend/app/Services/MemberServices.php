@@ -6,6 +6,7 @@ use App\Events\MemberCreatedEvent;
 use App\Models\Member;
 use Illuminate\Support\Facades\Auth;
 
+
 class MemberServices
 {
     public function addMember(array $data){
@@ -17,10 +18,8 @@ class MemberServices
                 'team_mate_id' => $data['team_mate_id'] ?? null,
             ]);
 
-            // check if notifiable comes from user_id or team_mate_id
-            if($member->user_id){
-                event(new MemberCreatedEvent($member));
-            }
+     
+            event(new MemberCreatedEvent($member, Auth::user()));
 
             
             
