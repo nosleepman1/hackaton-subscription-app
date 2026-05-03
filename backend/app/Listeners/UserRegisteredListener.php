@@ -6,21 +6,14 @@ use App\Events\UserRegistered;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class UserRegisteredListener
-{
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
+class UserRegisteredListener implements ShouldQueue {
+    
+    public function __construct() {}
 
     /**
      * Handle the event.
-     */
-    public function handle(UserRegistered $event): void
-    {
+     */ 
+    public function handle(UserRegistered $event): void {
         $event->user->sendEmailVerificationNotification();
     }
 }

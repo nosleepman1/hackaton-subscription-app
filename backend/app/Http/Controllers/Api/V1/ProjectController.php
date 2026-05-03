@@ -10,16 +10,13 @@ use App\Models\Theme;
 
 class ProjectController extends Controller
 {
-    public function __construct() {
-        $this->authorizeResource(Project::class);
-    }
-
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Project::class);
         return response()->json([
             'message' => 'Projets récupérés avec succès',
             'projects' => Project::where('deleted_at', null)->orderBy('name', 'asc')->get(),
@@ -86,9 +83,16 @@ class ProjectController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Project $project) {
-        $project->delete();
-        return response()->json([
-            'message' => 'Projet supprimé avec succès',
-        ]);     
+       try{
+            $project->delete();
+            return response()->json([
+                'message' => 'Projet supprimé avec succès',
+            ]);     
+       } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Erreur lors de la suppression du projet',
+                'error' => $e->getMessage(),
+            ], 500);
+       }    
     }
 }

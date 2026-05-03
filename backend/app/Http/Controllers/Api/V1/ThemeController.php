@@ -9,16 +9,12 @@ use App\Http\Requests\Theme\UpdateThemeRequest;
 
 class ThemeController extends Controller
 {
-
-    public function __construct() {
-        $this->authorizeResource(Theme::class);
-    }
-    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Theme::class);
         return response()->json([
             'message' => 'Thèmes récupérés avec succès',
             'themes' => Theme::where('deleted_at', null)->orderBy('name', 'asc')->get(),
@@ -30,6 +26,7 @@ class ThemeController extends Controller
      */
     public function store(StoreThemeRequest $request)
     {
+        $this->authorize('create', Theme::class);
         $data = $request->validated();
         $theme = Theme::create($data);
         return response()->json([
@@ -43,6 +40,7 @@ class ThemeController extends Controller
      */
     public function show(Theme $theme)
     {
+        $this->authorize('view', $theme);
         return response()->json([
             'message' => 'Thème récupéré avec succès',
             'theme' => $theme,
@@ -54,6 +52,7 @@ class ThemeController extends Controller
      */
     public function update(UpdateThemeRequest $request, Theme $theme)
     {
+        $this->authorize('update', $theme);
         $data = $request->validated();
         $theme->update($data);
         return response()->json([
@@ -67,7 +66,8 @@ class ThemeController extends Controller
      */
     public function destroy(Theme $theme)
     {
-        //soft delete
+        $this->authorize('delete', $theme);
+            
         $theme->delete();   
         return response()->json([
             'message' => 'Thème supprimé avec succès',

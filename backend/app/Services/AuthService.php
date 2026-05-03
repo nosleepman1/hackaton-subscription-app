@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
-    public function register($data) {
+    public function register(array $data) {
 
         $user = User::where('email', $data['email'])->first();
 
@@ -27,15 +27,15 @@ class AuthService
         $user = User::create($data);
 
         event(new UserRegistered($user));
+        
         return [
             "success" => true,
             "message" => "Inscription reussie, verifiez votre mail"
         ];
     }
 
-    public function login($data) {
+    public function login(array $data) {
 
-        // Vérifie d'abord si c'est un administrateur
         $admin = Admin::where('email', $data['email'])->first();
        
         if ($admin && Hash::check($data['password'], $admin->password)) {

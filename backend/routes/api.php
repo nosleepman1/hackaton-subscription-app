@@ -39,9 +39,8 @@ Route::prefix("v1")->group(function () {
         Route::post('teams/from-interesteds', [AdminController::class, 'storeTeamFromInteresteds']);
     });
 
-    Route::prefix("projects")->group(function () {
-        Route::apiResource('', ProjectController::class);
-        Route::get('/by-theme/{theme}', [ProjectController::class, 'indexByTheme']);
-    }); 
+    Route::apiResource('projects', ProjectController::class);
+    Route::get('/by-theme/{theme}', [ProjectController::class, 'indexByTheme']);
+
 
 });
