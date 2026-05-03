@@ -10,19 +10,22 @@ use App\Http\Requests\TeamMate\StoreTeamMateRequest;
 use App\Http\Requests\TeamMate\UpdateTeamMateRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\TeamMateServices;
 
 class TeamMateController extends Controller
 {
+
+    public function __construct(protected TeamMateServices $teamMateServices)
+    {
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json([
-            'success' => true,
-            'message' => 'Team mates récupérés avec succès',
-            'data' => TeamMate::where('deleted_at', null)->orderBy('lastname', 'asc')->get(),
-        ]);     
+        $response = $this->teamMateServices->getTeamMates();
+        
+        return response()->json($response, $response['status'] ?? 200);
     }
 
     /**
@@ -30,41 +33,9 @@ class TeamMateController extends Controller
      */
     public function store(StoreTeamMateRequest $request)
     {
-        try {            
-            $teamMate = TeamMate::create($request->validated());
-           
-           $team = Team::where('user_id', Auth::id())->first();
-           
-           if ($team) {
-                if ($team->members()->count() >= 5) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'L\'équipe a atteint le nombre maximum de 5 membres.',
-                    ], 422);
-                }
-
-                $member = Member::create([
-                    'team_id' => $team->id,
-                    'team_mate_id' => $teamMate->id,
-                ]);
-           }
-            
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la création du coéquipier',
-                'error' => $e->getMessage(),
-            ]);
-        }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Coéquipier créé et ajouté à l\'équipe avec succès',
-            'data' => [
-                'team_mate' => $teamMate,
-                'member'    => $member
-            ]
-        ]);
+        $response = $this->teamMateServices->createTeamMate($request->validated());
+        
+        return response()->json($response, $response['status'] ?? 200);
     }
 
     /**
@@ -72,11 +43,9 @@ class TeamMateController extends Controller
      */
     public function show(TeamMate $teamMate)
     {
-        return response()->json([
-            'success' => true,
-            'message' => 'Coéquipier récupéré avec succès',
-            'data' => $teamMate,
-        ]);
+        $response = $this->teamMateServices->getTeamMateById($teamMate->id);
+    //-------------------------------------------------------------------------
+        return response()->json($response, $response['status'] ?? 200);
     }
 
     /**

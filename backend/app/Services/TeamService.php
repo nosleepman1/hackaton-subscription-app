@@ -11,12 +11,6 @@ use App\Models\Admin;
 
 class TeamService
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
-    {
-    }
 
     public function createTeam(array $data){
         try {
@@ -71,6 +65,8 @@ class TeamService
     public function updateTeam(array $data, Team $team){
         try {
             $team->update($data);
+
+
         } catch (\Exception $e) {
             return [
                 'success' => false,
@@ -88,6 +84,7 @@ class TeamService
 
     public function deleteTeam(Team $team){
         try {
+            
             $team->delete();
         } catch (\Exception $e) {
             return [
@@ -104,7 +101,7 @@ class TeamService
         ];
     }
 
-    public function  showTeam(Team $team){
+    public function showTeam(Team $team){
         try {
             $team = $team->with('user')->find($team->id);
         } catch (\Exception $e) {

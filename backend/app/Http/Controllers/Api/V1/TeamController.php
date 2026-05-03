@@ -18,7 +18,10 @@ class TeamController extends Controller
     public function index()
     {
         $response = $this->teamService->getTeams();
-        return response()->json($response);
+        if($response['success']) {
+            return response()->json($response, 200);
+        }
+        return response()->json($response, 500);
     }
 
 

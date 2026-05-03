@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('email');
             $table->string('phone');
+            $table->string('matricule');
+            $table->string('grade');
+            $table->string('filiere');
             $table->softDeletes();  
             $table->timestamps();
         });
