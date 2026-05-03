@@ -26,7 +26,7 @@ class TeamService
                     'user_id' => $captain->id,
                 ]);
 
-                event(new TeamCreatedEvent($team, $member));
+                event(new TeamCreatedEvent($team, $captain));
             }
         } catch (\Exception $e) {
             return [

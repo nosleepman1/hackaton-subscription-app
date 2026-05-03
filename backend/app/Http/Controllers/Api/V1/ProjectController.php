@@ -40,8 +40,10 @@ class ProjectController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StoreProjectRequest $request) {
-        $data = $request->validated();
 
+        $this->authorize('create', Project::class);
+
+        $data = $request->validated();
         $project = Project::create($data);
 
         return response()->json([
@@ -54,6 +56,8 @@ class ProjectController extends Controller
      * Display the specified resource.
      */
     public function show(Project $project) {
+
+        $this->authorize('view', $project);
         return response()->json([
             'message' => 'Projet récupéré avec succès',
             'project' => $project, 
@@ -64,6 +68,9 @@ class ProjectController extends Controller
      * Update the specified resource in storage.
      */
     public function update(UpdateProjectRequest $request, Project $project) {
+
+        $this->authorize('update', $project);
+        
         try {
             $data = $request->validated();
             $project->update($data);
@@ -83,6 +90,9 @@ class ProjectController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Project $project) {
+
+        $this->authorize('delete', $project);
+        
        try{
             $project->delete();
             return response()->json([

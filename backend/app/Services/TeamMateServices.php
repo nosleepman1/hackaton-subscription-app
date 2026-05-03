@@ -6,16 +6,21 @@ use App\Models\Member;
 use App\Models\Team;
 use App\Models\TeamMate;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TeamMateServices
 {
+
     public function createTeamMate(array $data) {
+
         try {
             $teamMate = TeamMate::create($data);
+
             $team = Team::where('user_id', Auth::id())->first();
             
             if ($team) {
-                if ($team->members()->count() >= 5) {
+                $teamMatesCount = Member::where('team_id', $team->id)->count();
+                if ($teamMatesCount >= 5) {
                     return [
                         'success' => false,
                         'message' => 'Votre équipe a atteint le nombre maximum de membres (5).',
@@ -23,11 +28,12 @@ class TeamMateServices
                 }
 
                 $member = Member::create([
-                    'user_id' => $teamMate->id,
+                    'team_mate_id' => $teamMate->id,
                     'team_id' => $team->id,
                 ]);
 
             } else {
+                $teamMate->delete();
                 return [
                     'success' => false,
                     'message' => 'Aucune équipe trouvée',
@@ -40,6 +46,9 @@ class TeamMateServices
                 'data' => [$member, $teamMate],
             ];
         } catch (\Exception $e) {
+            if (isset($teamMate)) {
+                $teamMate->delete();
+            }
             return [
                 'success' => false,
                 'message' => 'Erreur lors de la création du team mate',

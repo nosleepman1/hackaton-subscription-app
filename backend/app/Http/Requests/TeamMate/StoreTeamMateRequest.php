@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests\TeamMate;
 
+use App\Enums\Filiere;
+use App\Enums\Grade;
 use App\Models\Team;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreTeamMateRequest extends FormRequest
 {
@@ -14,7 +17,7 @@ class StoreTeamMateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Team::where('user_id', Auth::id())->exists();
+        return true;
     }
 
     /**
@@ -25,10 +28,13 @@ class StoreTeamMateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'firstname' => 'required|string|max:255',
-            'lastname'  => 'required|string|max:255',
-            'email'     => 'required|email|max:255',
+            'firstname' => 'required|string|min:2|max:255',
+            'lastname'  => 'required|string|min:2|max:255',
+            'email'     => 'required|email|max:255|unique:team_mates,email',
             'phone'     => 'required|string|max:20',
+            'matricule' => 'required|string|max:20|unique:team_mates,matricule',
+            'grade'     => ['required', new Enum(Grade::class)],
+            'filiere'   => ['required', new Enum(Filiere::class)],
         ];
     }
 

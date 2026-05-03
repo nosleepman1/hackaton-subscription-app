@@ -14,10 +14,13 @@ class TeamMate extends Model
         'lastname',
         'email',
         'phone',
+        'matricule',
+        'grade',
+        'filiere',
     ];
 
     public function members()
     {
-        return $this->hasOne(Member::class);
+        return $this->hasMany(Member::class);
     }
 }
