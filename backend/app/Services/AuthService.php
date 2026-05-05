@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\Filiere;
 use App\Enums\Grade;
 use App\Events\UserRegistered;
+use App\Http\Resources\UserResource;
 use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +45,7 @@ class AuthService
                 "success" => true,
                 "message" => "Connexion admin réussie",
                 "token" => $token,
+                "user" => $admin,
                 "role" => "admin",
             ];
         }
@@ -63,6 +65,7 @@ class AuthService
             "success" => true,
             'message' => "Connexion réussie",
             'token' => $token,
+            'user' => new UserResource($user),
             'role' => 'user',
         ];  
     }
