@@ -1,10 +1,6 @@
 
 import { createContext, useEffect, useState } from "react"
 import type { User } from "@/types/auth"
-import type { LoginRequest, LoginResponse } from "@/types/auth"
-import { login } from "@/services/auth/login"
-import { register } from "@/services/auth/register"
-import type { LoginRequest } from "@/types/auth"
 import CURRENT_USER from "@/services/auth/currentUser"
 
 interface AuthContextType {
