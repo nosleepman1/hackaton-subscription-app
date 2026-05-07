@@ -21,7 +21,7 @@ const Register = () => {
     const [filiere, setFiliere] = useState<string>("")
     const [phone, setPhone] = useState<string>("")
 
-    const {loading, register, error, success} = useRegister()
+    const {loading, register, error} = useRegister()
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -115,10 +115,10 @@ const Register = () => {
                                 />
                             </div>
                                 
-                            </div>
+                        </div>
 
-                            <div className="flex gap-3 ">
-                                <div className="grid gap-2 w-full">
+                        <div className="flex gap-3 ">
+                            <div className="grid gap-2 w-full">
                                     <Label htmlFor="level">Niveau</Label>
                                     <Select 
                                         value={grade}
@@ -153,11 +153,14 @@ const Register = () => {
                                     </Select>
                                 </div>
                                 
-                            </div>
                         </div>
+
                         <Button type="submit" className="w-full mt-4">
-                            S'inscrire
+                            {loading ? "Inscription en cours" + <Spinner/> : "S'inscrire"}
                         </Button>
+
+                        {error && <p>Erreur lors de l'inscription</p>}
+                        
                         <div className="text-center mt-4">
                             <p className="text-sm text-muted-foreground">
                                 Vous avez déjà un compte ?   <br />
@@ -166,6 +169,7 @@ const Register = () => {
                                 </Link>
                             </p>
                         </div>
+                        
                     </form>
                 </CardContent>
             </Card>
