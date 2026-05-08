@@ -1,25 +1,15 @@
-// Point d'entrée de l'application
-// Enveloppe l'ensemble avec les providers de contexte (auth, thème) et le routeur
+import Navbar from "./components/layouts/navbar"
+import AppRoutes from "./routes/appRoutes"
 
-import { BrowserRouter } from 'react-router-dom'
-import { AuthProvider } from './context/AuthContext'
-import { ThemeProvider } from './context/ThemeContext'
-import { ToastProvider } from './components/ui/Toast'
-import AppRouter from './router/AppRouter'
 
 const App = () => {
   return (
-    <BrowserRouter>
-      {/* Provider de thème : doit envelopper toute l'app pour appliquer les classes CSS */}
-      <ThemeProvider>
-        {/* Provider d'authentification : gère le token Sanctum et le rôle utilisateur */}
-        <AuthProvider>
-          <ToastProvider>
-            <AppRouter />
-          </ToastProvider>
-        </AuthProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+    <main className="min-h-screen bg-muted/30">
+      <Navbar />
+      <div className="flex justify-center items-center min-h-screen   mx-auto px-4 sm:px-1 lg:px-3">
+        <AppRoutes />
+      </div>
+    </main> 
   )
 }
 
