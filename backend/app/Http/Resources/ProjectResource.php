@@ -18,6 +18,7 @@ class ProjectResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
+            'theme' => ThemeResource::make($this->whenLoaded('theme')),
         ];
     }
 }
