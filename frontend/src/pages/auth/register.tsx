@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Link } from "react-router-dom"
 import { useState } from "react"
 import useRegister from "@/hooks/auth/useRegister"
-import type { RegisterRequest, User } from "@/types/auth"
+import type { RegisterRequest } from "@/types/auth"
 import { Spinner } from "@/components/ui/spinner"
 
 const Register = () => {
