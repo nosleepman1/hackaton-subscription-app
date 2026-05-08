@@ -17,10 +17,7 @@ class ProjectController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Project::class);
-        return response()->json([
-            'message' => 'Projets récupérés avec succès',
-            'projects' => Project::where('deleted_at', null)->with('theme')->orderBy('name', 'asc')->get(),
-        ]); 
+        return ProjectResource::collection(Project::where('deleted_at', null)->with('theme')->orderBy('name', 'asc')->get());
     }
 
     /**
