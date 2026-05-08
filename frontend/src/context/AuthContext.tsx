@@ -7,8 +7,9 @@ interface AuthContextType {
     user: User | null
     token: string | null
     isAuthenticated: boolean
-    login: (email: string, password: string) => Promise<void>
+    login: (newToken : string) => Promise<void>
     logout: () => Promise<void>
+    loading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
