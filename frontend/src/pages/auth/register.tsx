@@ -38,6 +38,19 @@ const Register = () => {
         register(user)    
     }
 
+    if (error) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="text-center">
+                    <p className="text-red-500">Une erreur est survenue</p>
+                    <Button onClick={() => window.location.reload()} className="mt-4">
+                        Recharger la page
+                    </Button>
+                </div>
+            </div>
+        )
+    }
+
 
 
     return (
