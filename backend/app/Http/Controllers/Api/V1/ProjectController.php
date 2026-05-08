@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Project\StoreProjectRequest;
 use App\Http\Requests\Project\UpdateProjectRequest;
+use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use App\Models\Theme;
 
@@ -17,10 +18,7 @@ class ProjectController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Project::class);
-        return response()->json([
-            'message' => 'Projets récupérés avec succès',
-            'projects' => Project::where('deleted_at', null)->with('theme')->orderBy('name', 'asc')->get(),
-        ]); 
+        return ProjectResource::collection(Project::where('deleted_at', null)->with('theme')->orderBy('name', 'asc')->get());
     }
 
     /**

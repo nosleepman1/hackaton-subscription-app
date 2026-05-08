@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Theme;
 use App\Http\Requests\Theme\StoreThemeRequest;
 use App\Http\Requests\Theme\UpdateThemeRequest;
+use App\Http\Resources\ThemeResource;
 
 class ThemeController extends Controller
 {
@@ -15,10 +16,7 @@ class ThemeController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Theme::class);
-        return response()->json([
-            'message' => 'Thèmes récupérés avec succès',
-            'themes' => Theme::where('deleted_at', null)->orderBy('name', 'asc')->get(),
-        ]);
+        return ThemeResource::collection(Theme::where('deleted_at', null)->orderBy('name', 'asc')->get());
     }
 
     /**
