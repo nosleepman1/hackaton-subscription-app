@@ -3,10 +3,6 @@ import type { RegisterRequest, RegisterResponse } from "@/types/auth"
 
 
 export const REGISTER = async (request: RegisterRequest): Promise<RegisterResponse> => {
-    try {
-        const response = await API.post<RegisterResponse>("/auth/register", request)
-        return response.data
-    } catch (error) {
-        throw error
-    }
+    const response = await API.post("auth/register", request)
+    return response.data
 }
