@@ -1,13 +1,21 @@
 import { Button } from "@/components/ui/button"
-
-/**
- * Partie accueil pour hackton, 
- * 1. Bienvenue etc ...
- * 2. Liste de quelques projets et leurs themes avec un boutton voir plus mais en meme temps le hackathon en vedette sur le bienvenue "ISI INOVATIONS DAY" avec dutexte
- * 3. CTA avec je m interresse a un projet avec le boutton et l autre qu est creer une equipe
- */
+import { useGetProjects } from "@/hooks/project/useGetProject"
 
 const Home = () => {
+    const {data, isLoading, isError, error} = useGetProjects()
+    
+    const projects = data?.data || []
+
+    console.log(projects)
+
+    if(isLoading) {
+        return <div>Chargement...</div>
+    }
+
+    if(isError) {
+        return <div>Erreur: {error.message}</div>
+    }
+
     return (
         <div className="">
             <section className="px-4 py-20 md:py-32 text-center">
@@ -28,6 +36,25 @@ const Home = () => {
                         Participez aux meilleurs hackathons, trouvez votre équipe et créez des projets innovants.
                     </p>
 
+
+
+                    <div className="max-w-4xl mx-auto">
+                        {/**projects list for interrests, use projects variable as an Project type array and map for display */}
+
+                        <h1>Les projets</h1>
+
+                        {projects.map((project) => (
+                            <div key={project.id}>
+                                <h2>{project.name}</h2>
+                                <p>{project.description}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    
+                    
+                    
+                    
                     {/* CTA buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Button
