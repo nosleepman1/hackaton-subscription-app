@@ -9,6 +9,11 @@ import { useState } from "react"
 import useRegister from "@/hooks/auth/useRegister"
 import type { RegisterRequest } from "@/types/auth"
 import { Spinner } from "@/components/ui/spinner"
+import { useGrade } from "@/hooks/grade/useGrade"
+import { useFiliere } from "@/hooks/filiere/useFiliere"
+import type { Grade } from "@/types/grade"
+import type { Filiere } from "@/types/filiere"
+
 
 const Register = () => {
 
@@ -22,6 +27,15 @@ const Register = () => {
     const [phone, setPhone] = useState<string>("")
 
     const {loading, register, error} = useRegister()
+
+    const {data:grades, isLoading:isGradeLoading, isError:isGradeError, error:gradeError} = useGrade()
+    const {data:filieres, isLoading:isFiliereLoading, isError:isFiliereError, error:filiereError} = useFiliere()
+
+
+    console.log(grades);
+    console.log(filieres);  
+    
+
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -130,6 +144,9 @@ const Register = () => {
                                 
                         </div>
 
+
+                        {/**configure error boundaries in thes selects fields */}
+                        <ErrorBoundary> 
                         <div className="flex gap-3 ">
                             <div className="grid gap-2 w-full">
                                     <Label htmlFor="level">Niveau</Label>
@@ -140,11 +157,18 @@ const Register = () => {
                                             <SelectValue placeholder="Niveau" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="L1">Licence 1</SelectItem>
-                                            <SelectItem value="L2">Licence 2</SelectItem>
-                                            <SelectItem value="L3">Licence 3</SelectItem>
-                                            <SelectItem value="M1">Master 1</SelectItem>
-                                            <SelectItem value="M2">Master 2</SelectItem>
+                                            <SelectItem value="selectionner" disabled>Selectionner un niveau</SelectItem>
+                                            {isGradeLoading ? (
+                                                <SelectItem value="erreur" disabled>Chargement...</SelectItem>
+                                            ) : gradeError ? (
+                                                <SelectItem value="chargement" disabled>Erreur de chargement</SelectItem>
+                                            ) : (
+                                                grades?.data?.map((grade: Grade) => (
+                                                    <SelectItem key={grade.value} value={grade.value}>
+                                                        {grade.label}
+                                                    </SelectItem>
+                                                ))
+                                            )}
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -158,15 +182,24 @@ const Register = () => {
                                             <SelectValue placeholder="Filiere" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="IAGE">Informatique Appliquée à la Gestion des Entreprises</SelectItem>
-                                            <SelectItem value="GL">Génie Logiciel</SelectItem>
-                                            <SelectItem value="RI">Réseaux Informatique</SelectItem>
-                                            <SelectItem value="CS">Cybersécurité</SelectItem>
+                                            <SelectItem value="" disabled>Selectionner une filiere</SelectItem>
+                                            {isFiliereLoading ? (
+                                                <SelectItem value="" disabled>Chargement...</SelectItem>
+                                            ) : filiereError ? (
+                                                <SelectItem value="" disabled>Erreur de chargement</SelectItem>
+                                            ) : (
+                                                filieres?.data?.map((filiere: Filiere) => (
+                                                    <SelectItem key={filiere.value} value={filiere.value}>
+                                                        {filiere.label}
+                                                    </SelectItem>
+                                                ))
+                                            )}
                                         </SelectContent>
                                     </Select>
                                 </div>
                                 
                         </div>
+                        </ErrorBoundary>
 
                         <Button type="submit" className="w-full mt-4">
                             {loading ? "Inscription en cours" + <Spinner/> : "S'inscrire"}
