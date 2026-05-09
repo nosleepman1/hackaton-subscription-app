@@ -16,36 +16,11 @@ import useRegister from "@/hooks/auth/useRegister"
 import { useGrade } from "@/hooks/grade/useGrade"
 import { useFiliere } from "@/hooks/filiere/useFiliere"
 
-import type { RegisterRequest } from "@/types/auth"
+import type { RegisterRequest, SelectOption, ApiSelectProps } from "@/types/auth"
 import type { Grade } from "@/types/grade"
 import type { Filiere } from "@/types/filiere"
-
 import { Spinner } from "@/components/ui/spinner"
 
-// ─────────────────────────────────────────────────────────────
-// Types
-// ─────────────────────────────────────────────────────────────
-
-interface SelectOption {
-  value: string
-  label: string
-}
-
-interface ApiSelectProps {
-  label: string
-  id: string
-  value: string
-  onValueChange: (v: string) => void
-  placeholder: string
-  isLoading: boolean
-  isError: boolean
-  items: SelectOption[]
-  refetch?: () => void
-}
-
-// ─────────────────────────────────────────────────────────────
-// Select réutilisable
-// ─────────────────────────────────────────────────────────────
 
 const ApiSelect = ({
   label,
@@ -113,9 +88,6 @@ const ApiSelect = ({
   )
 }
 
-// ─────────────────────────────────────────────────────────────
-// Page Register
-// ─────────────────────────────────────────────────────────────
 
 const Register = () => {
   // Form states
@@ -127,10 +99,8 @@ const Register = () => {
   const [grade, setGrade] = useState("")
   const [filiere, setFiliere] = useState("")
   const [phone, setPhone] = useState("")
-  const [formError, setFormError] = useState("")
-
   // Register hook
-  const { loading, register, error } = useRegister()
+  const { loading, register, error, success } = useRegister()
 
   // Grades
   const {
@@ -149,14 +119,12 @@ const Register = () => {
   } = useFiliere()
 
   // Mapping sécurisé
-  const gradeOptions: SelectOption[] =
-    gradesData?.map((g: Grade) => ({
+  const gradeOptions: SelectOption[] = gradesData?.map((g: Grade) => ({
       value: String(g.value),
       label: g.label,
     })) ?? []
 
-  const filiereOptions: SelectOption[] =
-    filieresData?.map((f: Filiere) => ({
+  const filiereOptions: SelectOption[] = filieresData?.map((f: Filiere) => ({
       value: String(f.value),
       label: f.label,
     })) ?? []
@@ -164,18 +132,6 @@ const Register = () => {
   // Submit
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    setFormError("")
-
-    if (!grade) {
-      setFormError("Veuillez sélectionner un niveau.")
-      return
-    }
-
-    if (!filiere) {
-      setFormError("Veuillez sélectionner une filière.")
-      return
-    }
 
     const user: RegisterRequest = {
       matricule,
@@ -217,6 +173,9 @@ const Register = () => {
               onChange={(e) => setMatricule(e.target.value)}
               required
             />
+            {error?.errors?.matricule?.map((err, i) => (
+              <p key={i} className="text-red-500 text-sm">{err}</p>
+            ))}
           </div>
 
           {/* Nom + Prénom */}
@@ -232,6 +191,9 @@ const Register = () => {
                 onChange={(e) => setLastname(e.target.value)}
                 required
               />
+              {error?.errors?.lastname?.map((err, i) => (
+                <p key={i} className="text-red-500 text-sm">{err}</p>
+              ))}
             </div>
 
             <div className="grid gap-2 w-full">
@@ -245,6 +207,9 @@ const Register = () => {
                 onChange={(e) => setFirstname(e.target.value)}
                 required
               />
+              {error?.errors?.firstname?.map((err, i) => (
+                <p key={i} className="text-red-500 text-sm">{err}</p>
+              ))}
             </div>
           </div>
 
@@ -260,6 +225,9 @@ const Register = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+            {error?.errors?.email?.map((err, i) => (
+              <p key={i} className="text-red-500 text-sm">{err}</p>
+            ))}
           </div>
 
           {/* Password */}
@@ -274,6 +242,9 @@ const Register = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            {error?.errors?.password?.map((err, i) => (
+              <p key={i} className="text-red-500 text-sm">{err}</p>
+            ))}
           </div>
 
           {/* Phone */}
@@ -287,6 +258,9 @@ const Register = () => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
+            {error?.errors?.phone?.map((err, i) => (
+              <p key={i} className="text-red-500 text-sm">{err}</p>
+            ))}
           </div>
 
           {/* Selects */}
@@ -302,6 +276,9 @@ const Register = () => {
               items={gradeOptions}
               refetch={refetchGrades}
             />
+            {error?.errors?.grade?.map((err, i) => (
+              <p key={i} className="text-red-500 text-sm">{err}</p>
+            ))}
 
             <ApiSelect
               id="filiere"
@@ -314,17 +291,12 @@ const Register = () => {
               items={filiereOptions}
               refetch={refetchFilieres}
             />
+            {error?.errors?.filiere?.map((err, i) => (
+              <p key={i} className="text-red-500 text-sm">{err}</p>
+            ))}
           </div>
 
-          {/* Error */}
-          {(formError || error) && (
-            <p className="text-sm text-center text-destructive">
-              {formError ||
-                "Erreur lors de l'inscription. Veuillez réessayer."}
-            </p>
-          )}
 
-          {/* Submit */}
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? (
               <span className="flex items-center justify-center gap-2">

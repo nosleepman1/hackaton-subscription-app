@@ -1,8 +1,8 @@
 import { LOGIN } from "@/services/auth/login"
 import type { LoginRequest } from "@/types/auth"
-import { useState } from "react"
+import  { useState } from "react"
 
-const useLogin = () => {
+const useLogin = ()  => {
 
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<boolean>(false)
