@@ -23,10 +23,10 @@ Route::prefix("v1")->group(function () {
         Route::post("login", [AuthController::class, "login"]);
         Route::post("logout", [AuthController::class, "logout"])->middleware('auth:sanctum');
         Route::get("verify/{id}/{hash}", [AuthController::class, "verify"])->name("verification.verify");
-        Route::get("grades", [AuthController::class, "grades"]);
-        Route::get("filieres", [AuthController::class, "filieres"]);
     });
 
+    Route::get("grades", [AuthController::class, "grades"]);
+    Route::get("filieres", [AuthController::class, "filieres"]);
 
     Route::apiResource('themes', ThemeController::class);
     Route::apiResource('teams', TeamController::class)->middleware('auth:sanctum');
