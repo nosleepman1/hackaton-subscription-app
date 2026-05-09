@@ -3,9 +3,9 @@ import { useQuery } from "@tanstack/react-query"
 
 
 export const useFiliere = () => {
-    const {data, isLoading, isError, error} = useQuery({
+    const {data, isLoading, isError, error, refetch} = useQuery({
             queryKey: ["filiere"],
             queryFn: GET_FILIERES,
         })
-    return {data, isLoading, isError, error}
+    return {data, isLoading, isError, error, refetch}
 }
