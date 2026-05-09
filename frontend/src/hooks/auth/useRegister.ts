@@ -1,5 +1,5 @@
 import { REGISTER } from "@/services/auth/register"
-import type { RegisterError, RegisterRequest } from "@/types/auth"
+import type { RegisterError, RegisterRequest, RegisterResponse } from "@/types/auth"
 import { useState } from "react"
 
 
@@ -7,20 +7,22 @@ import { useState } from "react"
  const useRegister = () => {
     
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<RegisterError>(null)
+    const [error, setError] = useState<RegisterError | null>(null)
     const [success, setSuccess] = useState<string | null>(null)
 
-    const register = async (request: RegisterRequest) => {
+    const register = async (request: RegisterRequest)  => {
+       
         try {
             setLoading(true)
             setError(null)
-            const response = await REGISTER(request)
+            const response = await REGISTER(request)  
+            if(!response.success) {
+
+            }
             setSuccess(response.message)
 
-        } catch (error) {
-            const err = error as RegisterError
-            if(err.errors) setError(err);
-
+        } catch (error) {  
+            setError(error as RegisterError)
         } finally {
             setLoading(false)
         }
