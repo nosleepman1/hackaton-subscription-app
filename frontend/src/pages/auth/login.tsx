@@ -14,7 +14,7 @@ const Login = () => {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
 
-    const { login, loading, error} = useLogin()
+    const { handleLogin: login, loading, error} = useLogin()
 
     const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
