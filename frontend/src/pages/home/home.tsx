@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useGetProjects } from "@/hooks/project/useGetProject"
 import { ArrowRight, Users, Sparkles, ChevronDown, Heart } from "lucide-react"
+import { AuthContext } from "@/context/AuthContext"
 
 const INITIAL_DISPLAY_COUNT = 6
 
@@ -95,12 +96,17 @@ const SkeletonCard = () => (
 )
 
 const Home = () => {
+
   const { data, isLoading, isError, error } = useGetProjects()
   const [showAll, setShowAll] = useState(false)
 
   const projects = data?.data || []
   const displayedProjects = showAll ? projects : projects.slice(0, INITIAL_DISPLAY_COUNT)
   const hasMore = projects.length > INITIAL_DISPLAY_COUNT
+
+  const {isAuthenticated} = useContext(AuthContext)
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
