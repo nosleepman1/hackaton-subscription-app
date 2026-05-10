@@ -21,7 +21,6 @@ import { useState } from "react"
                 setSuccess((response as RegisterResponse).message)
             } else {
                 setError(response as RegisterError)
-                console.log(response)
             }
 
 

@@ -25,18 +25,6 @@ const Login = () => {
         login(request)
     }
 
-    if(error){
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="text-center">
-                    <p className="text-red-500">Une erreur est survenue</p>
-                    <Button onClick={() => window.location.reload()} className="mt-4">
-                        Recharger la page
-                    </Button>
-                </div>
-            </div>
-        )
-    }
 
     return (
 
@@ -49,6 +37,13 @@ const Login = () => {
                 <form 
                     onSubmit={handleLogin}
                     className="mt-4">
+                        {error && (
+                            <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-lg text-center mb-4">
+                                {error.message}
+                            </div>
+                        )}  
+
+                        
                         <div className="grid gap-4">
                             <div className="grid gap-2 my-3">
                                 <Label htmlFor="email">Email</Label>
