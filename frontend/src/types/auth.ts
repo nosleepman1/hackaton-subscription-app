@@ -15,7 +15,7 @@ export interface LoginRequest {
 //-----------------------------------------------------------------
 
 export interface RegisterResponse {
-    success: boolean
+    success: boolean,
     message: string
 }
 
