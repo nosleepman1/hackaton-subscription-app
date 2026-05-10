@@ -2,9 +2,12 @@ import { AuthContext } from "@/context/AuthContext"
 import { LOGIN } from "@/services/auth/login"
 import type { LoginError, LoginRequest, LoginResponse } from "@/types/auth"
 import  { useContext, useState } from "react"
+import { useNavigate } from "react-router-dom"
+
 
 const useLogin = ()  => {
 
+    const navigate = useNavigate()
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<LoginError | null>(null)
     const [success, setSuccess] = useState<string | null>(null)
@@ -20,6 +23,7 @@ const useLogin = ()  => {
 
                 login((response as LoginResponse).token)
                 setSuccess((response as LoginResponse).message)
+                navigate("/")
                 
             } else {
                 setError(response as LoginError)

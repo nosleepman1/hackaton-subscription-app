@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setToken(newToken)
         const currentUser = await CURRENT_USER(newToken)
         setUser(currentUser)
-   }
+    }
 
    const logout = () : Promise<void> => {
     localStorage.removeItem('token')
