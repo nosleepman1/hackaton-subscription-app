@@ -12,7 +12,7 @@ interface AuthContextType {
     loading: boolean
 }
 
-const AuthContext = createContext<AuthContextType | null>(null)
+export const AuthContext = createContext<AuthContextType | null>(null)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
@@ -20,7 +20,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
 
-    // login and register function are already in services/auth/login.ts and services/auth/register.ts use them directly
 
    const login = async (newToken : string) => {
         localStorage.setItem('token', newToken)
