@@ -11,12 +11,12 @@ use App\Http\Controllers\Api\V1\InterestedController;
 use App\Http\Controllers\Api\V1\TeamMateController;
 use App\Http\Controllers\Api\V1\MemberController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
 
 Route::prefix("v1")->group(function () {
+
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    })->middleware('auth:sanctum'); 
     
     Route::prefix("auth")->group(function () {
         Route::post("register", [AuthController::class, "register"]);
