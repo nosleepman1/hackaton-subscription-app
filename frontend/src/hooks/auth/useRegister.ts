@@ -15,11 +15,14 @@ import { useState } from "react"
         try {
             setLoading(true)
             setError(null)
-            const response = await REGISTER(request)  
-            if(!response.success) {
-
+            const response : RegisterResponse | RegisterError = await REGISTER(request)  
+            
+            if((response as RegisterResponse).success) {
+                setSuccess((response as RegisterResponse).message)
+            } else {
+                setError(response as RegisterError)
             }
-            setSuccess(response.message)
+
 
         } catch (error) {  
             setError(error as RegisterError)

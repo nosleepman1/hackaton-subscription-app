@@ -12,10 +12,15 @@ export interface LoginRequest {
     password: string
 }
 
+export interface LoginError {
+    message: string,
+    success: boolean
+}   
+
 //-----------------------------------------------------------------
 
 export interface RegisterResponse {
-    success: boolean
+    success: boolean,
     message: string
 }
 
