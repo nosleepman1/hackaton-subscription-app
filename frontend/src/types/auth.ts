@@ -64,11 +64,11 @@ export interface User {
 
 export interface AuthContextType {
     user: User | null
-    token: string
+    token: string | null
     isAuthenticated: boolean
-    login: (email: string, password: string) => Promise<void>
-    register: (email: string, password: string) => Promise<void>
+    login: (newToken : string) => Promise<void>
     logout: () => Promise<void>
+    loading: boolean
 }
 
 //--------------------------------------------------------- 

@@ -2,15 +2,7 @@
 import { createContext, useEffect, useState } from "react"
 import type { User } from "@/types/auth"
 import CURRENT_USER from "@/services/auth/currentUser"
-
-interface AuthContextType {
-    user: User | null
-    token: string | null
-    isAuthenticated: boolean
-    login: (newToken : string) => Promise<void>
-    logout: () => Promise<void>
-    loading: boolean
-}
+import type { AuthContextType } from "@/types/auth"
 
 export const AuthContext = createContext<AuthContextType | null>(null)
 
