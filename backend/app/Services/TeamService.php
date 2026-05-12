@@ -52,7 +52,9 @@ class TeamService
             $teams = TeamResource::collection(Team::with('user')->paginate(10));
         } else {
             $teams = new TeamResource(Team::where('user_id', $user->id)
-                        ->with('members', 'user')->get());
+                        ->with('members', 'user')
+                        ->with('project')
+                        ->first());
         }
 
         return [

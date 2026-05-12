@@ -16,7 +16,7 @@ const useStoreTeam = () => {
             setError(null)
             const response : TeamResponse | TeamError = await CREATE_TEAM(data)
             
-            if((response as TeamResponse).id) {
+            if((response as TeamResponse)) {
                 setSuccess(true)
                 setLoading(false)
             } else {
@@ -29,7 +29,12 @@ const useStoreTeam = () => {
         }
     }
 
-    return { storeTeam, loading, error, success }
+    const reset = () => {
+        setSuccess(false)
+        setError(null)
+    }
+
+    return { storeTeam, loading, error, success, reset }
 }
 
 export default useStoreTeam
