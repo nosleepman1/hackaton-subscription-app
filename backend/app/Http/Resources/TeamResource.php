@@ -17,8 +17,8 @@ class TeamResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'user' => UserResource::make($this->whenLoaded('user')),
-            'members' => MemberResource::make($this->whenLoaded('members')),
+            'project' => ProjectResource::make($this->whenLoaded('project')),
+            'members' => TeamMateResource::collection($this->whenLoaded('members')),
         ];
     }
 }
