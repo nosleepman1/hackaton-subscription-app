@@ -16,7 +16,7 @@ class MemberResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => UserResource::make($this->whenLoaded('user')),
+            'teamMate' => TeamMateResource::make($this->whenLoaded('teamMate')) ?? null,
         ];
     }
 }
