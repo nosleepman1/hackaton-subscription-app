@@ -39,9 +39,9 @@ export const GET_TEAMS = async () : Promise<TeamResponse[] | TeamError> => {
 }
 
 
-export const GET_TEAM_BY_ID = async (id: string) : Promise<TeamResponse | TeamError> => {
+export const GET_TEAM_BY_ID = async () : Promise<TeamResponse[] | TeamResponse | TeamError> => {
     try {
-        const response = await API.get(`/teams/${id}`)
+        const response = await API.get(`/teams`)
         return response.data
     } catch (error) {
         if(axios.isAxiosError<TeamError>(error)) {

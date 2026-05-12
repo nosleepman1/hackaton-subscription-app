@@ -3,6 +3,9 @@ import { Users, Rocket, ChevronRight, Loader2 } from "lucide-react"
 import CreateTeam from "@/components/app/teams/createTeam"
 import { useGetProjects } from "@/hooks/project/useGetProject"
 import { Badge } from "@/components/ui/badge"
+import useGetTeam from "@/hooks/team/useGetTeam"
+import { useContext, useEffect } from "react"
+import { AuthContext } from "@/context/AuthContext"
 
 const ISI_BLUE = "#0055A4"
 
@@ -17,6 +20,44 @@ const fadeUp = {
 
 const Team = () => {
   const { data: projects, isLoading, isError } = useGetProjects()
+  const { team, loading, getTeam } = useGetTeam()
+  const { user } = useContext(AuthContext)
+
+
+  useEffect(() => {
+    if (user?.id) getTeam(user.id)
+  }, [user])
+
+  if (loading) {
+    return (
+      <div className="flex items-center gap-2 text-sm text-gray-400 py-10 justify-center">
+        <Loader2 size={16} className="animate-spin" />
+        Chargement de votre équipe...
+      </div>
+    )
+  }
+
+  if (team) {
+    return (
+      <div className="min-h-screen bg-gray-50 px-4 py-10 md:px-10">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2">
+          Votre équipe
+        </h1>
+        <p className="text-gray-500 mt-2 max-w-xl text-sm md:text-base">
+          Voici les détails de votre équipe
+        </p>
+        <div className="mt-4">
+          <h1 className="text-xl font-semibold text-gray-900 mb-2">{team?.data?.name}</h1>
+          <p className="text-gray-500 text-sm">{team?.data?.project?.name}</p>
+          <div className="mt-2">
+
+          </div>
+
+
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-10 md:px-10">
