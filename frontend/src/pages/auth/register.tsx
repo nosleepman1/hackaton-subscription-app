@@ -64,7 +64,7 @@ const ApiSelect = ({
 
       {/* Select */}
       {!isLoading && !isError && (
-        <Select value={value} onValueChange={onValueChange}>
+        <Select value={value} onValueChange={onValueChange} >
           <SelectTrigger id={id} className="w-full">
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
@@ -100,7 +100,7 @@ const Register = () => {
   const [filiere, setFiliere] = useState("")
   const [phone, setPhone] = useState("")
   // Register hook
-  const { loading, register, error, success } = useRegister()
+  const { loading, register, error } = useRegister()
 
   // Grades
   const {
@@ -264,7 +264,7 @@ const Register = () => {
           </div>
 
           {/* Selects */}
-          <div className="flex gap-3">
+          <div className="flex gap-3 overflow-hidden">
             <ApiSelect
               id="grade"
               label="Niveau"
