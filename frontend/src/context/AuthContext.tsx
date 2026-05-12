@@ -2,22 +2,14 @@
 import { createContext, useEffect, useState } from "react"
 import type { User } from "@/types/auth"
 import CURRENT_USER from "@/services/auth/currentUser"
-
-interface AuthContextType {
-    user: User | null
-    token: string | null
-    isAuthenticated: boolean
-    login: (newToken : string) => Promise<void>
-    logout: () => Promise<void>
-    loading: boolean
-}
+import type { AuthContextType } from "@/types/auth"
 
 export const AuthContext = createContext<AuthContextType | null>(null)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     const [user, setUser] = useState<User | null>(null)
-    const [token, setToken] = useState<string | null>(null)
+    const [token, setToken] = useState<string | null>(localStorage.getItem('token'))
     const [loading, setLoading] = useState<boolean>(true)
 
 
@@ -37,15 +29,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
    useEffect(() => {
     const loadUser = async () => {
-        if(token) {
+        const storedToken = token ?? localStorage.getItem('token')
+        if(storedToken) {
             try {
-                const currentUser = await CURRENT_USER(token)
+                const currentUser = await CURRENT_USER(storedToken)
                 setUser(currentUser)
             } catch {
                 logout()
             } finally {
                 setLoading(false)
             }
+        } else {
+            setLoading(false)
         }
     }
 

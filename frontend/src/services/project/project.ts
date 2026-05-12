@@ -1,5 +1,6 @@
 import API from "@/api/api";
-import type { ProjectRequest, ProjectResponse } from "@/types/project";
+import type { ProjectRequest, ProjectResponse, ProjectError } from "@/types/project";
+import axios from "axios";
 
 const GET_PROJECTS = async () => {
 
@@ -14,9 +15,15 @@ const GET_PROJECT_BY_ID = async (id: string) => {
     return response.data
 }
 
-const CREATE_PROJECT = async (data: ProjectRequest) : Promise<ProjectResponse> => {
-    const response = await API.post(`/projects`, data)
-    return response.data
+const CREATE_PROJECT = async (data: ProjectRequest) : Promise<ProjectResponse | ProjectError> => {
+    try {
+        const response = await API.post(`/projects`, data)
+        return response.data
+    } catch (error) {
+        if(axios.isAxiosError<ProjectError>(error)) {
+            return error.response?.data
+        }
+    }
 }
 
 
