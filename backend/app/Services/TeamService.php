@@ -51,13 +51,14 @@ class TeamService
         $user = Auth::user();
 
         if ($user instanceof Admin) {
-            $teams = TeamResource::collection(Team::with('user')->paginate(10));
+            $teams = TeamResource::collection(Team::with('user')->with('project')->paginate(10));
         } else {
             $teams = new TeamResource(Team::where('user_id', $user->id)
                         ->with('teamMates', 'user')
                         ->with('project')
                         ->withCount('teamMates', 'members')
                         ->first());
+
             $members = MemberResource::collection(Member::where('team_id', $teams->id)
                         ->with('teamMate')
                         ->get());          
@@ -68,7 +69,7 @@ class TeamService
             'message' => "Liste des équipes",
             'data' => [
                 'team' => $teams,
-                'members' => $members,
+                'members' => $members ?? null,
             ],
         ];
     }

@@ -18,6 +18,7 @@ class TeamResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'project' => ProjectResource::make($this->whenLoaded('project')),
+            'user' => UserResource::make($this->whenLoaded('user')),
         ];
     }
 }
