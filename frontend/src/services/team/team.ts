@@ -1,5 +1,5 @@
 import API from "@/api/api"
-import type { TeamRequest, TeamResponse, TeamError } from "@/types/team"
+import type { TeamRequest, TeamResponse, TeamError, AdminTeamResponse } from "@/types/team"
 import axios from "axios"
 
 
@@ -27,7 +27,7 @@ export const UPDATE_TEAM = async (data: TeamRequest) : Promise<TeamResponse | Te
 
 
 
-export const GET_TEAMS = async () : Promise<TeamResponse[] | TeamError> => {
+export const GET_TEAMS = async () : Promise<TeamResponse | TeamError | AdminTeamResponse> => {
     try {
         const response = await API.get(`/teams`)
         return response.data
@@ -39,7 +39,7 @@ export const GET_TEAMS = async () : Promise<TeamResponse[] | TeamError> => {
 }
 
 
-export const GET_TEAM_BY_ID = async () : Promise<TeamResponse[] | TeamResponse | TeamError> => {
+export const GET_TEAM_BY_ID = async () : Promise<AdminTeamResponse | TeamResponse | TeamError> => {
     try {
         const response = await API.get(`/teams`)
         return response.data

@@ -1,191 +1,149 @@
-import { motion } from "framer-motion"
-import { Users, Rocket, ChevronRight, Loader2 } from "lucide-react"
-import CreateTeam from "@/components/app/teams/createTeam"
-import { useGetProjects } from "@/hooks/project/useGetProject"
-import { Badge } from "@/components/ui/badge"
-import useGetTeam from "@/hooks/team/useGetTeam"
 import { useContext, useEffect } from "react"
+import { Loader2, Users, Rocket, ArrowRight, Lightbulb, Target, Zap } from "lucide-react"
 import { AuthContext } from "@/context/AuthContext"
+import useGetTeam from "@/hooks/team/useGetTeam"
+
+import TeamHeader from "@/components/app/teams/TeamHeader"
+import TeamOverviewCard from "@/components/app/teams/TeamOverviewCard"
+import CreateTeam from "@/components/app/teams/createTeam"
 
 const ISI_BLUE = "#0055A4"
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.08, duration: 0.4, ease: "easeOut" },
-  }),
-}
-
 const Team = () => {
-  const { data: projects, isLoading, isError } = useGetProjects()
-  const { team, loading, getTeam } = useGetTeam()
   const { user } = useContext(AuthContext)
-
+  const { team, loading, getTeam } = useGetTeam()
 
   useEffect(() => {
-    if (user?.id) getTeam(user.id)
+    if (user?.id) getTeam()
   }, [user])
 
   if (loading) {
     return (
-      <div className="flex items-center gap-2 text-sm text-gray-400 py-10 justify-center">
-        <Loader2 size={16} className="animate-spin" />
-        Chargement de votre équipe...
-      </div>
-    )
-  }
-
-  if (team) {
-    return (
-      <div className="min-h-screen bg-gray-50 px-4 py-10 md:px-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2">
-          Votre équipe
-        </h1>
-        <p className="text-gray-500 mt-2 max-w-xl text-sm md:text-base">
-          Voici les détails de votre équipe
-        </p>
-        <div className="mt-4">
-          <h1 className="text-xl font-semibold text-gray-900 mb-2">{team?.data?.name}</h1>
-          <p className="text-gray-500 text-sm">{team?.data?.project?.name}</p>
-          <div className="mt-2">
-
-          </div>
-
-
+      <div className="min-h-screen flex flex-col justify-center items-center text-slate-400 gap-3 bg-slate-50">
+        <div
+          className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm"
+          style={{ background: `${ISI_BLUE}10` }}
+        >
+          <Loader2 className="animate-spin" size={22} style={{ color: ISI_BLUE }} />
         </div>
+        <p className="text-sm font-medium">Chargement de votre espace...</p>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-10 md:px-10">
+    <div className="min-h-screen bg-slate-50 px-4 md:px-10 py-8">
+      <TeamHeader hasTeam={!!team?.data} />
 
-      {/* ── Hero header ── */}
-      <motion.div
-        initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-10"
-      >
-        <div className="flex items-center gap-2 mb-1">
-          <span
-            className="text-xs font-semibold tracking-widest uppercase px-2 py-0.5 rounded-full text-white"
-            style={{ backgroundColor: ISI_BLUE }}
-          >
-            ISI Innovation Day
-          </span>
-        </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2">
-          Constituez votre équipe
-        </h1>
-        <p className="text-gray-500 mt-2 max-w-xl text-sm md:text-base">
-          Un projet vous inspire ? Vous avez déjà des collaborateurs en tête ?
-          Créez votre équipe et rejoignez l'aventure ISI Innovation Day.
-        </p>
-      </motion.div>
-
-      {/* ── CTA Card ── */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.97 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4, delay: 0.15 }}
-        className="rounded-2xl border border-blue-100 bg-white p-6 mb-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4 shadow-sm"
-      >
-        <div className="flex items-start gap-4">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-            style={{ backgroundColor: `${ISI_BLUE}15` }}
-          >
-            <Users size={20} style={{ color: ISI_BLUE }} />
-          </div>
-          <div>
-            <p className="font-semibold text-gray-900 text-sm md:text-base">
-              Prêt à former votre équipe ?
-            </p>
-            <p className="text-gray-400 text-xs md:text-sm mt-0.5">
-              Donnez un nom à votre équipe, associez-la à un projet et invitez vos collaborateurs.
-            </p>
-          </div>
-        </div>
-        {/* CreateTeam injecte son propre bouton qui ouvre la modale */}
-        <div className="shrink-0">
-          <CreateTeam />
-        </div>
-      </motion.div>
-
-      {/* ── Projets ── */}
-      <motion.h2
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.25 }}
-        className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
-      >
-        <Rocket size={18} style={{ color: ISI_BLUE }} />
-        Projets du hackathon
-      </motion.h2>
-
-      {isLoading && (
-        <div className="flex items-center gap-2 text-sm text-gray-400 py-10 justify-center">
-          <Loader2 size={16} className="animate-spin" />
-          Chargement des projets…
-        </div>
+      {team?.data ? (
+        <TeamOverviewCard team={team.data} />
+      ) : (
+        <NoTeamSection />
       )}
+    </div>
+  )
+}
 
-      {isError && (
-        <p className="text-sm text-red-500 text-center py-10">
-          Impossible de charger les projets. Veuillez réessayer.
-        </p>
-      )}
+/* ── Empty State: No Team ─────────────────────────────────── */
+const NoTeamSection = () => {
+  return (
+    <div className="space-y-6">
+      {/* ── Hero CTA Card ── */}
+      <div className="relative overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-sm">
+        {/* Top gradient accent */}
+        <div
+          className="h-1.5 w-full"
+          style={{ background: `linear-gradient(90deg, ${ISI_BLUE}, #60a5fa, #818cf8)` }}
+        />
 
-      {!isLoading && !isError && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {projects?.data?.map((project, i) => (
-            <motion.div
-              key={project.id}
-              custom={i}
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              whileHover={{ y: -3, transition: { duration: 0.2 } }}
-              className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex flex-col gap-3 cursor-pointer group"
+        <div className="p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div className="flex items-start gap-5">
+            <div
+              className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-sm"
+              style={{ background: `linear-gradient(135deg, ${ISI_BLUE}, #3b82f6)` }}
             >
-              {/* Barre colorée en haut */}
-              <div
-                className="h-1 w-10 rounded-full mb-1"
-                style={{ backgroundColor: ISI_BLUE }}
-              />
+              <Users size={26} className="text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
+                Prêt à former votre équipe ?
+              </h2>
+              <p className="text-slate-500 text-sm mt-1.5 max-w-md leading-relaxed">
+                Donnez un nom à votre équipe, associez-la à un projet et invitez vos
+                collaborateurs pour participer au hackathon.
+              </p>
+            </div>
+          </div>
 
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="font-semibold text-gray-900 text-sm leading-snug">
-                  {project.name}
-                </h3>
-                <Badge
-                  variant="secondary"
-                  className="text-xs shrink-0"
-                  style={{ color: ISI_BLUE }}
-                >
-                  #{project.id}
-                </Badge>
-              </div>
-
-              {project.description && (
-                <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">
-                  {project.description}
-                </p>
-              )}
-
-              <div className="mt-auto pt-2 flex items-center gap-1 text-xs font-medium group-hover:gap-2 transition-all"
-                style={{ color: ISI_BLUE }}
-              >
-                Créer une équipe sur ce projet
-                <ChevronRight size={13} className="transition-transform group-hover:translate-x-1" />
-              </div>
-            </motion.div>
-          ))}
+          <div className="shrink-0">
+            <CreateTeam />
+          </div>
         </div>
-      )}
+      </div>
+
+      {/* ── Steps / How it works ── */}
+      <div className="grid sm:grid-cols-3 gap-4">
+        {[
+          {
+            icon: <Lightbulb size={20} />,
+            title: "1. Choisissez un projet",
+            desc: "Parcourez les thèmes proposés et trouvez celui qui vous inspire.",
+            gradient: "linear-gradient(135deg, #f59e0b, #f97316)",
+          },
+          {
+            icon: <Target size={20} />,
+            title: "2. Créez votre équipe",
+            desc: "Nommez votre équipe et associez-la au projet choisi.",
+            gradient: `linear-gradient(135deg, ${ISI_BLUE}, #3b82f6)`,
+          },
+          {
+            icon: <Zap size={20} />,
+            title: "3. Invitez vos coéquipiers",
+            desc: "Ajoutez jusqu'à 3 membres pour compléter votre équipe.",
+            gradient: "linear-gradient(135deg, #8b5cf6, #a855f7)",
+          },
+        ].map((step, i) => (
+          <div
+            key={i}
+            className="group bg-white rounded-2xl border border-slate-100 p-6 shadow-sm hover:shadow-md hover:border-slate-200 transition-all duration-200"
+          >
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-white mb-4 shadow-sm"
+              style={{ background: step.gradient }}
+            >
+              {step.icon}
+            </div>
+            <h3 className="font-semibold text-slate-900 text-sm mb-1.5">{step.title}</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">{step.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Motivation Banner ── */}
+      <div
+        className="rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-5 text-white"
+        style={{ background: `linear-gradient(135deg, ${ISI_BLUE}, #1e40af)` }}
+      >
+        <div
+          className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
+          style={{ background: "rgba(255,255,255,0.15)" }}
+        >
+          <Rocket size={22} />
+        </div>
+        <div className="text-center md:text-left flex-1">
+          <h3 className="font-bold text-lg">L'innovation commence ici</h3>
+          <p className="text-blue-100 text-sm mt-1 max-w-lg">
+            Chaque grande idée a besoin d'une équipe solide. Formez la vôtre et
+            relevez le défi de l'ISI Innovation Day.
+          </p>
+        </div>
+        <div className="shrink-0">
+          <div className="flex items-center gap-2 text-sm font-medium text-blue-100 hover:text-white transition-colors cursor-default">
+            Commencer maintenant
+            <ArrowRight size={15} />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

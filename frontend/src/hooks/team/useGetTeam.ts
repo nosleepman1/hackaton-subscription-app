@@ -1,11 +1,11 @@
 import { GET_TEAM_BY_ID } from "@/services/team/team"
-import type { TeamError, TeamResponse } from "@/types/team"
+import type { AdminTeamResponse, TeamError, TeamResponse } from "@/types/team"
 import { useState } from "react"
 
 
 const useGetTeam = () => {
 
-    const [team, setTeam] = useState<TeamResponse | null | TeamResponse[]>(null)
+    const [team, setTeam] = useState<TeamResponse | null | AdminTeamResponse>(null)
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<TeamError | null>(null)
 
@@ -13,15 +13,13 @@ const useGetTeam = () => {
         try {
             setLoading(true)
             setError(null)
-            const response : TeamResponse | TeamError | TeamResponse[] = await GET_TEAM_BY_ID()
+            const response : TeamResponse | TeamError | AdminTeamResponse = await GET_TEAM_BY_ID()
             
             if((response as TeamResponse)) {
-                console.log(response)
                 setTeam(response as TeamResponse)
                 setLoading(false)
-            } else if((response as TeamResponse[])) {
-                console.log(response)
-                setTeam((response as TeamResponse[])[0])
+            } else if((response as AdminTeamResponse)) {
+                setTeam((response as AdminTeamResponse))
                 setLoading(false)
             } else {
                 setError(response as TeamError)
