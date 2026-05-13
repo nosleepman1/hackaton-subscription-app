@@ -3,11 +3,13 @@ import { createContext, useEffect, useState } from "react"
 import type { User } from "@/types/auth"
 import CURRENT_USER from "@/services/auth/currentUser"
 import type { AuthContextType } from "@/types/auth"
+import { useNavigate } from "react-router-dom"
 
 export const AuthContext = createContext<AuthContextType | null>(null)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
+    const navigate = useNavigate()
     const [user, setUser] = useState<User | null>(null)
     const [token, setToken] = useState<string | null>(localStorage.getItem('token'))
     const [loading, setLoading] = useState<boolean>(true)
@@ -24,6 +26,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem('token')
     setToken(null)
     setUser(null)
+    navigate('/login')
     return Promise.resolve()
    }
 

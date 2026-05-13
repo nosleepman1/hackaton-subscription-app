@@ -52,24 +52,44 @@ class TeamService
 
         if ($user instanceof Admin) {
             $teams = TeamResource::collection(Team::with('user')->with('project')->paginate(10));
-        } else {
-            $teams = new TeamResource(Team::where('user_id', $user->id)
-                        ->with('teamMates', 'user')
-                        ->with('project')
-                        ->withCount('teamMates', 'members')
-                        ->first());
 
-            $members = MemberResource::collection(Member::where('team_id', $teams->id)
-                        ->with('teamMate')
-                        ->get());          
+            return [
+                'success'=> true,
+                'message' => "Liste des équipes",
+                'data' => [
+                    'team' => $teams,
+                    'members' => null,
+                ],
+            ];
         }
+
+        $team = Team::where('user_id', $user->id)
+                    ->with('teamMates', 'user', 'project')
+                    ->withCount('teamMates', 'members')
+                    ->first();
+
+        if (!$team) {
+            return [
+                'success' => true,
+                'message' => "Aucune équipe trouvée",
+                'data' => null,
+            ];
+        }
+
+        $teams = new TeamResource($team);
+
+        $members = MemberResource::collection(
+            Member::where('team_id', $team->id)
+                ->with('teamMate')
+                ->get()
+        );
 
         return [
             'success'=> true,
             'message' => "Liste des équipes",
             'data' => [
                 'team' => $teams,
-                'members' => $members ?? null,
+                'members' => $members,
             ],
         ];
     }

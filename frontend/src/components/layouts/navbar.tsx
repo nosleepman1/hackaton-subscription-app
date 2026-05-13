@@ -162,13 +162,13 @@ export default function Navbar({ activeHref = "/" }: NavbarProps) {
                         Profile
                     </Link>
 
-                    <Link
-                        to="/logout"
+                    <Button 
+                        onClick={logout}
                         className="text-[12px] font-medium text-blue-100 px-3 py-1.5 rounded-lg"
                         style={{ border: "1px solid rgba(255,255,255,0.2)" }}
                       >
                         Logout
-                    </Link>
+                    </Button>
                   </div>
               )}
 
