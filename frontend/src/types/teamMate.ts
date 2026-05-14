@@ -1,12 +1,25 @@
 
 
 export interface TeamMateRequest {
-    firstName: string
-    lastName: string
+    firstname: string
+    lastname: string
     email: string
     phone: string
     grade: string
     filiere: string
+    matricule : string
+}
+
+export interface TeamMateError {
+    message: string,
+    errors?: {
+        firstname?: string[],
+        lastname?: string[],
+        email?: string[],
+        phone?: string[],
+        grade?: string[],
+        filiere?: string[],
+    }
 }
 
 export interface AddTeamMateResponse {
