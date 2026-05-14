@@ -4,11 +4,12 @@ import AddMemberModal from "./AddMemberModal"
 
 type Props = {
   team: any
+  onMemberAdded?: () => void
 }
 
 const ISI_BLUE = "#0055A4"
 
-const TeamOverviewCard = ({ team }: Props) => {
+const TeamOverviewCard = ({ team, onMemberAdded }: Props) => {
   const validMembers = (team.members || []).filter((m: any) => m.teamMate)
   const spotsLeft = 4 - validMembers.length
 
@@ -97,7 +98,7 @@ const TeamOverviewCard = ({ team }: Props) => {
             </p>
           </div>
 
-          {spotsLeft > 0 && <AddMemberModal />}
+          {spotsLeft > 0 && <AddMemberModal onMemberAdded={onMemberAdded} />}
         </div>
 
         {validMembers.length > 0 ? (

@@ -36,7 +36,7 @@ const Team = () => {
       <TeamHeader hasTeam={!!team?.data} />
 
       {team?.data ? (
-        <TeamOverviewCard team={team.data} />
+        <TeamOverviewCard team={team.data} onMemberAdded={getTeam} />
       ) : (
         <NoTeamSection />
       )}

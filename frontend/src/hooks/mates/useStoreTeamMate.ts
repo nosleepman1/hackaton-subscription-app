@@ -10,19 +10,24 @@ const useStoreTeamMate = () => {
     const [success, setSuccess] = useState<string | null>(null);
 
 
-    const storeTeamMate = async (teamMate: TeamMateRequest) => {
+    const storeTeamMate = async (teamMate: TeamMateRequest): Promise<boolean> => {
         try {
             setLoading(true);
             setError(null);
             setSuccess(null);
             const response : TeamMateError | AddTeamMateResponse = await STORE_TEAM_MATE(teamMate);
-            if (response as TeamMateError) {
+            
+            // Check if the response is an error (has 'message' or 'errors' property)
+            if (response && ('errors' in response || ('message' in response && !('id' in response)))) {
                 setError(response as TeamMateError);
+                return false;
             } else {
-                setSuccess("Membre ajouté avec succès");     
+                setSuccess("Membre ajouté avec succès");
+                return true;
             }
         } catch (error) {
             setError({message: "Une erreur s'est produite"});
+            return false;
         } finally {
             setLoading(false);
         }
