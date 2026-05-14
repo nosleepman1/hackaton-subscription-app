@@ -36,7 +36,7 @@ const AddMemberModal = ({ onMemberAdded }: AddMemberModalProps) => {
   const [open, setOpen] = useState(false)
   const {data: filieres, isLoading:isLoadingFiliere} = useFiliere()
   const {data: grades, isLoading: isLoadingGrade} = useGrade()
-  const {storeTeamMate, loading, error, success} = useStoreTeamMate()
+  const {storeTeamMate, loading, error} = useStoreTeamMate()
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
