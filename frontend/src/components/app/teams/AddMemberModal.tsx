@@ -18,7 +18,11 @@ import { Label } from "@/components/ui/label"
 import {toast} from "sonner"
 
 
-const AddMemberModal = () => {
+type AddMemberModalProps = {
+  onMemberAdded?: () => void
+}
+
+const AddMemberModal = ({ onMemberAdded }: AddMemberModalProps) => {
 
   const [form, setForm] = useState<TeamMateRequest>({
     firstname: "",
@@ -32,29 +36,26 @@ const AddMemberModal = () => {
   const [open, setOpen] = useState(false)
   const {data: filieres, isLoading:isLoadingFiliere} = useFiliere()
   const {data: grades, isLoading: isLoadingGrade} = useGrade()
-  const {storeTeamMate, loading, error, success} = useStoreTeamMate()
+  const {storeTeamMate, loading, error} = useStoreTeamMate()
   
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    storeTeamMate(form)
-    console.log(success);
-    
-    if(!loading){
-      if (success) {
-        console.log("success apres : ", success);
-        
-        setOpen(false)
-        toast.success("Membre ajouté avec success")
-        setForm({
-          firstname: "",
-          lastname: "",
-          email: "",
-          phone: "",
-          grade: "",
-          filiere: "",
-          matricule: ""
-        })    
-      }
+    const isSuccess = await storeTeamMate(form)
+
+
+    if (isSuccess) {
+      setOpen(false)
+      toast.success("Membre ajouté avec succès")
+      onMemberAdded?.()
+      setForm({
+        firstname: "",
+        lastname: "",
+        email: "",
+        phone: "",
+        grade: "",
+        filiere: "",
+        matricule: ""
+      })    
     }
   }
 

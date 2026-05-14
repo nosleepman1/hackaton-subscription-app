@@ -1,5 +1,5 @@
 import { STORE_TEAM_MATE } from "@/services/mates/teamMate";
-import type { AddTeamMateResponse, TeamMateError, TeamMateRequest } from "@/types/teamMate";
+import type { TeamMateError, TeamMateRequest } from "@/types/teamMate";
 import { useState } from "react";
 
 
@@ -10,19 +10,29 @@ const useStoreTeamMate = () => {
     const [success, setSuccess] = useState<string | null>(null);
 
 
-    const storeTeamMate = async (teamMate: TeamMateRequest) => {
+    const storeTeamMate = async (teamMate: TeamMateRequest): Promise<boolean> => {
         try {
             setLoading(true);
             setError(null);
             setSuccess(null);
-            const response : TeamMateError | AddTeamMateResponse = await STORE_TEAM_MATE(teamMate);
-            if (response as TeamMateError) {
-                setError(response as TeamMateError);
+            const response = await STORE_TEAM_MATE(teamMate);
+            
+            // The API returns { success: true/false, message: "..." }
+            // Validation errors (422) return { message: "...", errors: {...} }
+            if (response?.success === true) {
+                setSuccess(response.message || "Membre ajouté avec succès");
+                return true;
             } else {
-                setSuccess("Membre ajouté avec succès");     
+                // Either API error (success: false) or validation error (has errors field)
+                setError({
+                    message: response?.message || "Une erreur s'est produite",
+                    errors: response?.errors
+                });
+                return false;
             }
         } catch (error) {
             setError({message: "Une erreur s'est produite"});
+            return false;
         } finally {
             setLoading(false);
         }
