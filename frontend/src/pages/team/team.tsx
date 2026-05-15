@@ -1,11 +1,12 @@
 import { useContext, useEffect } from "react"
-import { Loader2, Users, Rocket, ArrowRight, Lightbulb, Target, Zap } from "lucide-react"
+import { Users, Rocket, ArrowRight, Lightbulb, Target, Zap } from "lucide-react"
 import { AuthContext } from "@/context/AuthContext"
 import useGetTeam from "@/hooks/team/useGetTeam"
 
 import TeamHeader from "@/components/app/teams/TeamHeader"
 import TeamOverviewCard from "@/components/app/teams/TeamOverviewCard"
 import CreateTeam from "@/components/app/teams/createTeam"
+import { TeamOverviewSkeleton } from "@/components/app/teams/TeamSkeletons"
 
 const ISI_BLUE = "#0055A4"
 
@@ -17,25 +18,13 @@ const Team = () => {
     if (user?.id) getTeam()
   }, [user])
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col justify-center items-center text-slate-400 gap-3 bg-slate-50">
-        <div
-          className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm"
-          style={{ background: `${ISI_BLUE}10` }}
-        >
-          <Loader2 className="animate-spin" size={22} style={{ color: ISI_BLUE }} />
-        </div>
-        <p className="text-sm font-medium">Chargement de votre espace...</p>
-      </div>
-    )
-  }
-
   return (
     <div className="min-h-screen bg-slate-50 px-4 md:px-10 py-8">
       <TeamHeader hasTeam={!!team?.data} />
 
-      {team?.data ? (
+      {loading ? (
+        <TeamOverviewSkeleton />
+      ) : team?.data ? (
         <TeamOverviewCard team={team.data} onMemberAdded={getTeam} />
       ) : (
         <NoTeamSection />

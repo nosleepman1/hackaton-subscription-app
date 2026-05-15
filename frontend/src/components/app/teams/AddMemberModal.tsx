@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Loader, Plus } from "lucide-react"
+import { Skeleton } from "@/components/ui/skeleton"
 import { useFiliere } from "@/hooks/filiere/useFiliere"
 import { useGrade } from "@/hooks/grade/useGrade"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -134,9 +135,16 @@ const AddMemberModal = ({ onMemberAdded }: AddMemberModalProps) => {
           
 
           {isLoadingFiliere || isLoadingGrade ? (
-            <div className="flex items-center justify-center">
-              <Loader className="animate-spin" />
-            </div>
+            <>
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-16 rounded" />
+                <Skeleton className="h-9 w-full rounded-md" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-20 rounded" />
+                <Skeleton className="h-9 w-full rounded-md" />
+              </div>
+            </>
           ) : (
             <>
             <Label htmlFor="grade">Grade</Label>

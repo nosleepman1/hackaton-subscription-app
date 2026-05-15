@@ -8,7 +8,8 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Loader, Plus } from "lucide-react"
+import { Loader, Pencil } from "lucide-react"
+import { Skeleton } from "@/components/ui/skeleton"
 import { useFiliere } from "@/hooks/filiere/useFiliere"
 import { useGrade } from "@/hooks/grade/useGrade"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -57,8 +58,8 @@ const EditMemberModal = ({ onMemberAdded, member }: EditMemberModalProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-xl">
-          <Plus size={16} className="mr-2" />
+        <Button className="rounded-xl" variant="secondary" size="sm">
+          <Pencil size={14} className="mr-1.5" />
           Modifier 
         </Button>
       </DialogTrigger>
@@ -127,9 +128,16 @@ const EditMemberModal = ({ onMemberAdded, member }: EditMemberModalProps) => {
           
 
           {isLoadingFiliere || isLoadingGrade ? (
-            <div className="flex items-center justify-center">
-              <Loader className="animate-spin" />
-            </div>
+            <>
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-16 rounded" />
+                <Skeleton className="h-9 w-full rounded-md" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-20 rounded" />
+                <Skeleton className="h-9 w-full rounded-md" />
+              </div>
+            </>
           ) : (
             <>
             <Label htmlFor="grade">Grade</Label>
@@ -174,7 +182,7 @@ const EditMemberModal = ({ onMemberAdded, member }: EditMemberModalProps) => {
           )}
 
           <Button className="w-full mt-2" disabled={loading} >
-            {loading ? <Loader className="animate-spin" /> : "Ajouter"}
+            {loading ? <Loader className="animate-spin" /> : "Modifier"}
           </Button>
         </form>
       </DialogContent>
