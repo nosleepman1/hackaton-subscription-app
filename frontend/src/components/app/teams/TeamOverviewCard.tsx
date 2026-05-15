@@ -102,7 +102,7 @@ const TeamOverviewCard = ({ team, onMemberAdded }: Props) => {
         </div>
 
         {validMembers.length > 0 ? (
-          <TeamMembersList members={validMembers} />
+          <TeamMembersList members={validMembers} onRefresh={onMemberAdded} />
         ) : (
           <div className="text-center py-10 text-slate-400">
             <Users size={32} className="mx-auto mb-3 opacity-40" />

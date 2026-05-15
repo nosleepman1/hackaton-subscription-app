@@ -2,16 +2,21 @@
 //use alert dialog to confirm delete and edit
 
 
-type Props = {
+type DeleteProps = {
     member: any
     onDelete: (id: number) => void
+}
+
+type EditProps = {
+    member: any
+    onUpdate: (id: number) => void
 }
 
 import { useState } from "react"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogTitle } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 
-const MemberAction = ({ member, onDelete }: Props) => {
+export const DeleteMemberAction     = ({ member, onDelete }: DeleteProps) => {
     const [open, setOpen] = useState<boolean>(false)
     const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null)
     const [loading, setLoading] = useState<boolean>(false)
@@ -51,4 +56,3 @@ const MemberAction = ({ member, onDelete }: Props) => {
     )
 }
 
-export default MemberAction
