@@ -139,22 +139,22 @@ class TeamMateServices
 
     public function updateTeamMate(array $data, TeamMate $teamMate) {
         try {
-            $teamMate->update($data);
-           
            $team = Team::where('user_id', Auth::id())->first();
-           
            if ($team) {
-                if ($team->members()->count() >= 5) {
+                $member = Member::where('team_mate_id', $teamMate->id)->first();
+                if ($member->team_id == $team->id) {
+                    $teamMate->update($data);
+                } else {
                     return [
                         'success' => false,
-                        'message' => 'L\'équipe a atteint le nombre maximum de 5 membres.',
+                        'message' => 'Vous n\'êtes pas le propriétaire de l\'équipe',
                     ];
                 }
-
-                $member = Member::create([
-                    'team_id' => $team->id,
-                    'team_mate_id' => $teamMate->id,
-                ]);
+           }else{
+            return [
+                'success' => false,
+                'message' => 'Aucune équipe trouvée',
+            ];
            }
         } catch (\Exception $e) {
             return [
