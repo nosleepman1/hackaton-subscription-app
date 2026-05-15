@@ -13,7 +13,7 @@ import { useFiliere } from "@/hooks/filiere/useFiliere"
 import { useGrade } from "@/hooks/grade/useGrade"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { TeamMateRequest } from "@/types/teamMate"
-import useStoreTeamMate from "@/hooks/mates/useStoreTeamMate"
+import useStoreTeamMate from "@/hooks/mates/useTeamMate"
 import { Label } from "@/components/ui/label"
 import {toast} from "sonner"
 
