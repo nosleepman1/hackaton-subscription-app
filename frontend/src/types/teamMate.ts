@@ -24,8 +24,8 @@ export interface TeamMateError {
 
 export interface AddTeamMateResponse {
     id: number
-    firstName: string
-    lastName: string
+    firstname: string
+    lastname: string
     email: string
     phone: string
     grade: string
@@ -33,11 +33,35 @@ export interface AddTeamMateResponse {
 }
 
 export interface UpdateTeamMateForm {
-    firstName: string
-    lastName: string
-    email: string
-    phone: string
-    grade: string
-    filiere: string
+    id: number,
+    firstname: string,
+    lastname: string,
+    email: string,
+    phone: string,
+    grade: string,
+    filiere: string,
+    matricule: string
+}
+
+
+export interface UpdateTeamMateRequest {
+    firstName?: string
+    lastName?: string
+    email?: string
+    phone?: string
+    grade?: string
+    filiere?: string
+}
+
+export interface UpdateTeamMateResponse {
+    message: string,
+    errors?: {
+        firstName?: string[],
+        lastName?: string[],
+        email?: string[],
+        phone?: string[],
+        grade?: string[],
+        filiere?: string[],
+    }
 }
 

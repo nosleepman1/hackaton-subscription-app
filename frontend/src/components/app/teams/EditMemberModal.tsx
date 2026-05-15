@@ -8,55 +8,48 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Loader, Plus } from "lucide-react"
+import { Loader, Pencil } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useFiliere } from "@/hooks/filiere/useFiliere"
 import { useGrade } from "@/hooks/grade/useGrade"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { TeamMateRequest } from "@/types/teamMate"
 import useStoreTeamMate from "@/hooks/mates/useTeamMate"
 import { Label } from "@/components/ui/label"
 import {toast} from "sonner"
+import type { UpdateTeamMateForm } from "@/types/teamMate"
 
 
-type AddMemberModalProps = {
+type EditMemberModalProps = {
   onMemberAdded?: () => void
+  member: UpdateTeamMateForm
 }
 
-const AddMemberModal = ({ onMemberAdded }: AddMemberModalProps) => {
+const EditMemberModal = ({ onMemberAdded, member }: EditMemberModalProps) => {
 
-  const [form, setForm] = useState<TeamMateRequest>({
-    firstname: "",
-    lastname: "",
-    email: "",
-    phone: "",
-    grade: "",
-    filiere: "",
-    matricule: ""
+  const [form, setForm] = useState<UpdateTeamMateForm>({
+    id: member.id,
+    firstname: member.firstname,
+    lastname: member.lastname,
+    email: member.email,
+    phone: member.phone,
+    grade: member.grade,
+    filiere: member.filiere,
+    matricule: member.matricule
   })
   const [open, setOpen] = useState(false)
   const {data: filieres, isLoading:isLoadingFiliere} = useFiliere()
   const {data: grades, isLoading: isLoadingGrade} = useGrade()
-  const {storeTeamMate, loading, error} = useStoreTeamMate()
+  const {updateTeamMate, loading, error} = useStoreTeamMate()
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const isSuccess = await storeTeamMate(form)
+    const isSuccess = await updateTeamMate(form.id, form)
 
 
     if (isSuccess) {
       setOpen(false)
-      toast.success("Membre ajouté avec succès")
-      onMemberAdded?.()
-      setForm({
-        firstname: "",
-        lastname: "",
-        email: "",
-        phone: "",
-        grade: "",
-        filiere: "",
-        matricule: ""
-      })    
+      toast.success("Membre modifié avec succès")
+      onMemberAdded?.() 
     }
   }
 
@@ -65,15 +58,15 @@ const AddMemberModal = ({ onMemberAdded }: AddMemberModalProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-xl">
-          <Plus size={16} className="mr-2" />
-          Ajouter membre
+        <Button className="rounded-xl" variant="secondary" size="sm">
+          <Pencil size={14} className="mr-1.5" />
+          Modifier 
         </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-xl rounded-3xl">
         <DialogHeader>
-          <DialogTitle>Nouveau membre</DialogTitle>
+          <DialogTitle> Modifier un membre</DialogTitle>
         </DialogHeader>
 
         <form 
@@ -189,7 +182,7 @@ const AddMemberModal = ({ onMemberAdded }: AddMemberModalProps) => {
           )}
 
           <Button className="w-full mt-2" disabled={loading} >
-            {loading ? <Loader className="animate-spin" /> : "Ajouter"}
+            {loading ? <Loader className="animate-spin" /> : "Modifier"}
           </Button>
         </form>
       </DialogContent>
@@ -197,4 +190,4 @@ const AddMemberModal = ({ onMemberAdded }: AddMemberModalProps) => {
   )
 }
 
-export default AddMemberModal
+export default EditMemberModal

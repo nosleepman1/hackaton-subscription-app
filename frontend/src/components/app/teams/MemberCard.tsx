@@ -1,13 +1,32 @@
 import { Mail, Phone, GraduationCap, User } from "lucide-react"
+import { DeleteMemberAction } from "./MemberAction"
+import { toast } from "sonner"
+import useTeamMate from "@/hooks/mates/useTeamMate"
+import EditMemberModal from "./EditMemberModal"
 
 type Props = {
   member: any
+  onRefresh?: () => void
 }
 
 const ISI_BLUE = "#0055A4"
 
-const MemberCard = ({ member }: Props) => {
+const MemberCard = ({ member, onRefresh }: Props) => {
+  
   if (!member) return null
+
+  const { deleteTeamMate } = useTeamMate()
+  
+
+  const handleRemoveMember = async (id: number) => {
+    const response = await deleteTeamMate(id)
+    if (response) {
+      toast.success("Membre supprimé avec succès")
+      onRefresh?.()
+    } else {
+      toast.error("Erreur lors de la suppression du membre")
+    }
+  }
 
   const initials = `${(member.firstName || "")[0] || ""}${(member.lastName || "")[0] || ""}`.toUpperCase()
 
@@ -57,9 +76,16 @@ const MemberCard = ({ member }: Props) => {
             </span>
           </p>
         )}
+        <div className="flex justify-between mt-4">
+
+          {/* if update member */}
+          <EditMemberModal member={member} onMemberAdded={onRefresh} />
+          {/* if delete member*/}
+          <DeleteMemberAction member={member} onDelete={handleRemoveMember} />
+        </div>
       </div>
     </div>
   )
-}
+} 
 
 export default MemberCard
