@@ -3,7 +3,7 @@ import type { TeamMateError, TeamMateRequest } from "@/types/teamMate";
 import { useState } from "react";
 
 
-const useStoreTeamMate = () => {
+const useTeamMate = () => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<TeamMateError | null>(null);
@@ -91,4 +91,4 @@ const useStoreTeamMate = () => {
     return {storeTeamMate, updateTeamMate, deleteTeamMate, loading, error, success}  
 }
 
-export default useStoreTeamMate;
+export default useTeamMate;

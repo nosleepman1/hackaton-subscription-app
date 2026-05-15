@@ -86,10 +86,13 @@ class TeamMateServices
         }
     }   
     
-    public function deleteTeamMate(Member $member) {
+    public function deleteTeamMate(int $id) {
         try {
             $team = Team::where('user_id', Auth::id())->first();
+            $teamMate = TeamMate::find($id);
+
             if ($team) {
+                $member = $teamMate->members()->first();
                 if ($team->id != $member->team_id) {
                     return [
                         'success' => false,
@@ -102,10 +105,7 @@ class TeamMateServices
                     'message' => 'Aucune équipe trouvée',
                 ];
             }
-            $teamMate = TeamMate::find($member->team_mate_id);
             $teamMate->delete();
-            $member->delete();
-
             return [
                 'success' => true,
                 'message' => 'Team mate supprimé avec succès',
